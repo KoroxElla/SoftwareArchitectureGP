@@ -18,9 +18,10 @@ public class Patient {
     private String phoneNumber;
     private String address;
 
-    //One patient many appointments
+    //One patient many appointments and records
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointments> appointments;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Record> records;
 
     //Getters and setters

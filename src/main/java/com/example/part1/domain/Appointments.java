@@ -73,4 +73,10 @@ public class Appointments {
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
+    public Record getRecord() {
+        return record;
+    }
+    public void setRecord(Record record) {
+        this.record = record;
+    }
 }
