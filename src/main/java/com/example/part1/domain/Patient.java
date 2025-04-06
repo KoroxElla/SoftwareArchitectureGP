@@ -21,8 +21,6 @@ public class Patient {
     //One patient many appointments and records
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointments> appointments;
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Record> records;
 
     //Getters and setters
     public Long getId() {
@@ -71,11 +69,5 @@ public class Patient {
 
     public void setAppointments(List<Appointments> appointments) {
         this.appointments = appointments;
-    }
-    public List<Record> getRecords() {
-        return records;
-    }
-    public void setRecords(List<Record> records) {
-        this.records = records;
     }
 }

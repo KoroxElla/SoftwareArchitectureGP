@@ -8,10 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.JoinColumn;
-
 import java.sql.Timestamp;
-
-
 
 @Entity
 public class Appointments {
@@ -34,7 +31,7 @@ public class Appointments {
 
     // One medical record, one appointment
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Record record;
+    private MedicalRecord record;
 
     //Getters and setters
     public Long getId() {
@@ -73,10 +70,10 @@ public class Appointments {
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
-    public Record getRecord() {
+    public MedicalRecord getRecord() {
         return record;
     }
-    public void setRecord(Record record) {
+    public void setRecord(MedicalRecord record) {
         this.record = record;
     }
 }

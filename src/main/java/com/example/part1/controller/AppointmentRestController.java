@@ -3,7 +3,7 @@ package com.example.part1.controller;
 import com.example.part1.domain.Appointments;
 import com.example.part1.domain.Doctor;
 import com.example.part1.domain.Patient;
-import com.example.part1.domain.Record;
+import com.example.part1.domain.MedicalRecord;
 import com.example.part1.repo.AppointmentRepo;
 import com.example.part1.repo.DoctorRepo;
 import com.example.part1.repo.PatientRepo;
@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/appointments")
@@ -46,6 +47,15 @@ public class AppointmentRestController {
 
         if (patient.isEmpty() || doctor.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient or doctor not found.");
+        }
+        if (appointment.getAppointmentDate() == null) {
+            return ResponseEntity.badRequest().body("Appointment date must be provided.");
+        }
+        if (appointment.getStatus() == null) {
+            return ResponseEntity.badRequest().body("Appointment status must be provided.");
+        }
+        if (appointment.getNotes() == null) {
+            return ResponseEntity.badRequest().body("Notes must be provided.");
         }
         appointment.setPatient(patient.get());
         appointment.setDoctor(doctor.get());
@@ -96,16 +106,16 @@ public class AppointmentRestController {
     }
 
     //Endpoint #19 - handle GET requests to fetch records associated with an appointment
-    @GetMapping("/{id}/record")
+    @GetMapping("/{id}/medical-record")
     public ResponseEntity<?> getAppointmentRecord(@PathVariable Long id) {
         Optional<Appointments> appointment = appointmentRepo.findById(id);
 
         //If an appointment exists and has record
         if (appointment.isPresent() && appointment.get().getRecord() != null) {
-            Record record = appointment.get().getRecord();
+            MedicalRecord record = appointment.get().getRecord();
             return ResponseEntity.ok(record);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Record not found for this appointment.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("MedicalRecord not found for this appointment.");
         }
     }
 }

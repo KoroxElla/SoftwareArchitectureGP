@@ -1,12 +1,16 @@
 package com.example.part1.domain;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import java.sql.Timestamp;
 
-
 @Entity
-public class Record {
+public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

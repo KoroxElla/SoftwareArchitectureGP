@@ -7,9 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
-
 import java.util.List;
-
 
 @Entity
 public class Doctor {
@@ -22,7 +20,7 @@ public class Doctor {
     private String phoneNumber;
 
     // One doctor, many appointments
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Appointments> appointments;
 
     //Getters and setters
