@@ -34,7 +34,7 @@ public class MedicalRecordRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found.");
         }
         // If appointment already has a medical record
-        if (optional.get().getRecord() == null) {
+        if (optional.get().getRecord() != null) {
             return ResponseEntity.badRequest().body("Appointment already has a record.");
         }
 
