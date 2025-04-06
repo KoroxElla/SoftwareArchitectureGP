@@ -1,5 +1,7 @@
 package com.example.part1.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
@@ -22,11 +24,13 @@ public class Appointments {
     // One Patient many appointments
     @ManyToOne
     @JoinColumn(name = "patient_id")
+    @JsonBackReference("patient-appointments")
     private Patient patient;
 
     // One Doctor many appointments
     @ManyToOne
     @JoinColumn(name = "doctor_id")
+    @JsonBackReference("doctor-appointments")
     private Doctor doctor;
 
     // One medical record, one appointment

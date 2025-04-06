@@ -1,5 +1,6 @@
 package com.example.part1.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ public class Patient {
 
     //One patient many appointments and records
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("patient-appointments")
     private List<Appointments> appointments;
 
     //Getters and setters

@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.ManyToOne;
 import java.sql.Timestamp;
 
 @Entity
@@ -23,10 +22,6 @@ public class MedicalRecord {
     @OneToOne
     @JoinColumn(name = "appointment_id", unique = true)
     private Appointments appointment;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
 
     //Getters and setters
     public Long getId() {
@@ -64,11 +59,5 @@ public class MedicalRecord {
     }
     public void setAppointment(Appointments appointment) {
         this.appointment = appointment;
-    }
-    public Patient getPatient() {
-        return patient;
-    }
-    public void setPatient(Patient patient) {
-        this.patient = patient;
     }
 }
