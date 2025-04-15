@@ -4,10 +4,9 @@ Daniella Makolo
 Jabir Ali
 
 # Part1 - Hospital records management API
-Before runnig he aplication, follow these steps:
+Before running the aplication, follow these steps:
 
-MySQL - Database configuration.
-
+- MySQL - Database configuration.
 Make sure MySQL is installed and running, then run:
 
 - CREATE DATABASE part1db;
