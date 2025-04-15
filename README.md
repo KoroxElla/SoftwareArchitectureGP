@@ -7,6 +7,7 @@ Jabir Ali
 Before running the aplication, follow these steps:
 
 - MySQL - Database configuration.
+
 Make sure MySQL is installed and running, then run:
 
 - CREATE DATABASE part1db;
