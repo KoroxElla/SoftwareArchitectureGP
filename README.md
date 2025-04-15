@@ -6,7 +6,7 @@ Jabir Ali
 
 # Part1 - Medical Records Management API Project Setup
 
-MySQL - Database configuration 
+* MySQL - Database configuration 
 Make sure MySQL is installed and running, then run:
 
 - CREATE DATABASE part1db;
