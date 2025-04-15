@@ -1,7 +1,7 @@
 Members:
-Anuarite Alberto
-Daniella Makolo 
-Jabir Ali
+Anuarite Alberto (atfa1), 
+Daniella Makolo (dom10), 
+Jabir Ali (mja58).
 
 # Part1 - Hospital records management API
 Before running the aplication, follow these steps:
