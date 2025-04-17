@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">part2</string>
+    <string name="todo">button</string>
+    <string name="coursec">Course Code:</string>
+    <string name="coursen">Course Name:</string>
+    <string name="lecturern">Lecturer Name:</string>
+    <string name="name">Name</string>
+    <string name="Createcourse">Create New Course</string>
+    <string name="submit">Create</string>
 </resources>
