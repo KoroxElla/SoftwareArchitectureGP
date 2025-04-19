@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,91 +8,90 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.CreateCourseActivity">
 
-    <EditText
-        android:id="@+id/Coursecode"
-        android:layout_width="253dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="116dp"
-        android:autofillHints="eg. CO2124"
-        android:ems="10"
-        android:inputType="text"
-        android:text="@string/name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.379"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- CardView container for form -->
+<androidx.cardview.widget.CardView
+android:id="@+id/form_card"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:layout_margin="24dp"
+app:cardCornerRadius="16dp"
+app:cardElevation="8dp"
+app:layout_constraintTop_toTopOf="parent"
+app:layout_constraintBottom_toTopOf="@+id/button"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent">
 
-    <EditText
-        android:id="@+id/Coursename"
-        android:layout_width="253dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="84dp"
-        android:autofillHints="Software Architecture II"
-        android:ems="10"
-        android:inputType="text"
-        android:text="@string/name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.379"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Coursecode" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="373dp"
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <EditText
-        android:id="@+id/Lecturername"
-        android:layout_width="253dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="84dp"
-        android:autofillHints="Dr. Kehinde"
-        android:ems="10"
-        android:inputType="text"
-        android:text="@string/name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.379"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Coursename" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/coursec"
+            android:textColor="@color/warm_beige" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:text="@string/coursec"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.183"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/Coursecode"
+            android:layout_width="188dp"
+            android:layout_height="51dp"
+            android:autofillHints="@string/hint1"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/hint1"
+            android:inputType="text" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:text="@string/coursen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.186"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Coursecode" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/coursen"
+            android:textColor="@color/warm_beige" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:text="@string/lecturern"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.19"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Coursename" />
+        <EditText
+            android:id="@+id/Coursename"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:autofillHints="@string/hint2"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/hint2"
+            android:inputType="text" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="112dp"
-        android:onClick="returnhome"
-        android:text="@string/submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/lecturern"
+            android:textColor="@color/warm_beige" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/Lecturername"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:autofillHints="@string/hint3"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/hint3"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/courseCodeErrorTextView"
+            android:layout_width="194dp"
+            android:layout_height="48dp"
+            android:textColor="@android:color/holo_red_dark" /> <!-- Initially hidden -->
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
+    <!-- Submit Button -->
+<Button
+android:id="@+id/button"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="@string/submit"
+android:onClick="returnhome"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+android:layout_marginBottom="32dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
