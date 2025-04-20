@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Part2" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary (Mocha for text + warmth) -->
+        <item name="colorPrimary">@color/taupe</item>
+        <item name="colorPrimaryVariant">@color/warm_beige</item>
+        <item name="colorOnPrimary">@color/ivory</item>
+
+        <!-- Secondary (Ruby for rich, warm accents) -->
+        <item name="colorSecondary">@color/maroon</item>
+        <item name="colorSecondaryVariant">@color/pastel_peach</item>
+        <item name="colorOnSecondary">@color/ivory</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- Surface colors (beige background, mocha text) -->
+        <item name="colorSurface">@color/beige</item>
+        <item name="colorOnSurface">@color/mocha</item>
+
+        <!-- Background (overall window background color) -->
+        <item name="android:windowBackground">@drawable/background</item>
+
+        <!-- CardView default background -->
+        <item name="cardViewStyle">@style/CardView.Light</item>
+    </style>
+
+    <style name="CardView.Light" parent="CardView">
+        <item name="cardBackgroundColor">@color/maroon</item> <!-- Clean, warm card background -->
+    </style>
+</resources>
