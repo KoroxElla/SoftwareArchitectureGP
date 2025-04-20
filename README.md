@@ -21,3 +21,10 @@ Make sure MySQL is installed and running, then run:
 - FLUSH PRIVILEGES;
 
 >>>>>>> 00ce91122cc1e5e2b4d00993b8553feb8157e2f5
+>>>>>>> Git instructions:
+- cd into working directory first- SoftwareArchitectureGP in this situation on your terminal
+- Add all changes (git add --all)
+- Commit changes (git commit -m "Type any message here but do not remove the double quotation marks"
+- then pull changes from repository (git pull origin main)
+- NOTE: If you had already pushed before now and you checked the github repo that no one else had pushed after you you can just skip pulling
+- Finally, you push the new code you've committed (git push origin main)
