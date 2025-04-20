@@ -3,7 +3,7 @@ package com.example.part1.controller;
 import com.example.part1.domain.Appointments;
 import com.example.part1.domain.Doctor;
 import com.example.part1.domain.Patient;
-import com.example.part1.domain.MedicalRecord;
+import com.example.part1.domain.Record;
 import com.example.part1.repo.AppointmentRepo;
 import com.example.part1.repo.DoctorRepo;
 import com.example.part1.repo.PatientRepo;
@@ -112,10 +112,10 @@ public class AppointmentRestController {
 
         //If an appointment exists and has record
         if (appointment.isPresent() && appointment.get().getRecord() != null) {
-            MedicalRecord record = appointment.get().getRecord();
+            Record record = appointment.get().getRecord();
             return ResponseEntity.ok(record);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("MedicalRecord not found for this appointment.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Record not found for this appointment.");
         }
     }
 }

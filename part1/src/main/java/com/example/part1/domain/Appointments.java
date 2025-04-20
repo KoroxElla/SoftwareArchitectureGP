@@ -34,7 +34,7 @@ public class Appointments {
 
     // One medical record, one appointment
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private MedicalRecord record;
+    private Record record;
 
     //Getters and setters
     public Long getId() {
@@ -73,10 +73,10 @@ public class Appointments {
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
-    public MedicalRecord getRecord() {
+    public Record getRecord() {
         return record;
     }
-    public void setRecord(MedicalRecord record) {
+    public void setRecord(Record record) {
         this.record = record;
     }
 }

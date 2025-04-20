@@ -2,7 +2,7 @@ package com.example.part1.controller;
 
 import com.example.part1.domain.Patient;
 import com.example.part1.domain.Appointments;
-import com.example.part1.domain.MedicalRecord;
+import com.example.part1.domain.Record;
 import com.example.part1.repo.PatientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -89,7 +89,7 @@ public class PatientRestController {
     public ResponseEntity<Object> getPatientRecords(@PathVariable Long id) {
         Optional<Patient> optional = patientRepo.findById(id);
         if (optional.isPresent()) {
-            List<MedicalRecord> records = optional.get().getAppointments().stream()
+            List<Record> records = optional.get().getAppointments().stream()
                     .map(Appointments::getRecord)
                     .filter(java.util.Objects::nonNull)
                     .collect(Collectors.toList());

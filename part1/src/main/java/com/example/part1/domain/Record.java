@@ -9,7 +9,7 @@ import jakarta.persistence.OneToOne;
 import java.sql.Timestamp;
 
 @Entity
-public class MedicalRecord {
+public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
