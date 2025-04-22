@@ -11,7 +11,7 @@ import com.example.part2.data.entities.Student;
 import com.example.part2.data.repository.StudentRepository;
 
 public class AddStudentActivity extends AppCompatActivity {
-    private EditText studentName, studentEmail, studentUsername;
+    private EditText studentName, studentEmail, studentMatricn;
     private Button btnAdd;
     private int courseId;
     private StudentRepository studentRepository;
@@ -26,37 +26,39 @@ public class AddStudentActivity extends AppCompatActivity {
         studentRepository = new StudentRepository(getApplication());
         studentName = findViewById(R.id.studentName);
         studentEmail = findViewById(R.id.studentEmail);
-        studentUsername = findViewById(R.id.studentUsername);
+        studentMatricn = findViewById(R.id.studentMatricn);
         btnAdd = findViewById(R.id.btnAddStudent);
         btnAdd.setOnClickListener(v -> addStudent());
     }
     private void addStudent() {
         String name = studentName.getText().toString().trim();
         String email = studentEmail.getText().toString().trim();
-        String username = studentUsername.getText().toString().trim();
+        String matric = studentMatricn.getText().toString().trim();
 
-        if (name.isEmpty() || email.isEmpty() || username.isEmpty()) {
+        if (name.isEmpty() || email.isEmpty() || matric.isEmpty()) {
             Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
             return;
         }
+        int studentId;
+        try {
+            studentId = Integer.parseInt(matric);
+        } catch (NumberFormatException e) {
+            runOnUiThread(() -> Toast.makeText(this, "Matric number must be a number", Toast.LENGTH_SHORT).show());
+            return;
+        }
+
         new Thread(() -> {
-            //Get existing student by username
-            Student existing = studentRepository.getStudentByUsername(username);
-            if (existing != null && studentRepository.isStudentEnrolled(courseId, existing.getStudentId())) {
+            if (studentRepository.isStudentEnrolled(courseId, studentId)) {
                 runOnUiThread(() -> Toast.makeText(this, "Student already enrolled", Toast.LENGTH_SHORT).show());
             } else {
-                int studentId;
-                if (existing == null) {
-                    //Create new student
-                    Student newStudent = new Student();
-                    newStudent.setName(name);
-                    newStudent.setEmail(email);
-                    newStudent.setUserName(username);
-                    studentId = (int) studentRepository.insertAndGetId(newStudent);
-                } else {
-                    //Use existing studentId
-                    studentId = existing.getStudentId();
-                }
+                //Create new student
+                Student newStudent = new Student();
+                newStudent.setName(name);
+                newStudent.setEmail(email);
+                newStudent.setStudentId(studentId);
+                newStudent.setUserName(email.split("@")[0]);
+
+                studentRepository.insertAndGetId(newStudent); //Will return the same Id
                 //Enroll student in course
                 studentRepository.enrollStudent(courseId, studentId);
 

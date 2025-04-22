@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.example.part2.data.entities.Course;
 import com.example.part2.ui.adapters.CourseAdapter;
 import com.example.part2.viewmodel.CourseViewModel;
 
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

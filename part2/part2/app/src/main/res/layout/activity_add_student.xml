@@ -68,12 +68,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:labelFor="@id/studentUsername"
-                android:text="@string/studentUsername"
+                android:labelFor="@id/studentMatricn"
+                android:text="@string/studentMatricn"
                 android:textColor="@color/warm_beige" />
 
             <EditText
-                android:id="@+id/studentUsername"
+                android:id="@+id/studentMatricn"
                 android:layout_width="188dp"
                 android:layout_height="51dp"
                 android:autofillHints="username"
