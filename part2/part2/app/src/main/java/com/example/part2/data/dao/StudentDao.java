@@ -1,41 +1,29 @@
 package com.example.part2.data.dao;
-
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
+
 
 import com.example.part2.data.entities.Student;
 import com.example.part2.data.entities.StudentWithCourses;
 
+import java.util.List;
+
 @Dao
 public interface StudentDao {
 
-    //  Insert student and return generated ID
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     long insertStudent(Student student);
 
-    //  Optional insert without return (used if needed)
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertStudentVoid(Student student);
-
-    //  Get student with enrolled courses (Room will use your @Relation)
     @Transaction
-    @Query("SELECT * FROM Student WHERE userName = :userName")
-    LiveData<StudentWithCourses> getStudentWithCourses(String userName);
+    @Query("SELECT * FROM Student")
+    List<StudentWithCourses> getStudentsWithCourses();
 
-    //  Live observation of a single student
-    @Query("SELECT * FROM Student WHERE userName = :userName")
-    LiveData<Student> getStudentByUsername(String userName);
+    @Query("SELECT * FROM Student WHERE userName = :username LIMIT 1")
+    Student getStudentByUsername(String username);
 
-    //  Synchronous access (used in repository thread operations)
-    @Query("SELECT * FROM Student WHERE userName = :userName")
-    Student getStudentByUsernameSync(String userName);
-
-    //  Delete a student
     @Delete
     void deleteStudent(Student student);
 }
