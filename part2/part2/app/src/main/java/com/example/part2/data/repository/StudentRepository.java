@@ -28,26 +28,29 @@ public class StudentRepository {
         executorService = Executors.newSingleThreadExecutor();
     }
 
-    //  Task 6
+    // ✅ Task 6 - Get student and courses
     public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
         return studentDao.getStudentWithCourses(userName);
     }
 
-    // Task 7 - LiveData version for EditStudentActivity
+    // ✅ Task 7 - For editing student data (LiveData)
     public LiveData<Student> getStudentByUsername(String userName) {
         return studentDao.getStudentByUsername(userName);
     }
 
-    // Background version for AddStudentActivity
+    // ✅ Sync method (used in AddStudentActivity or background logic)
     public Student getStudentByUsernameSync(String username) {
         try {
-            return executorService.submit(() -> studentDao.getStudentByUsernameSync(username)).get();
+            return executorService.submit(() ->
+                    studentDao.getStudentByUsernameSync(username)
+            ).get();
         } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Consider using Log.e(TAG, "error", e) in production
             return null;
         }
     }
 
+    // ✅ Check if student is already enrolled in course
     public boolean isStudentEnrolled(int courseId, int studentId) {
         try {
             return executorService.submit(() ->
@@ -59,24 +62,32 @@ public class StudentRepository {
         }
     }
 
+    // ✅ Insert student and return the generated ID
     public long insertAndGetId(Student student) {
         try {
-            return executorService.submit(() -> studentDao.insertStudent(student)).get();
+            return executorService.submit(() ->
+                    studentDao.insertStudent(student)
+            ).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return -1;
         }
     }
 
+    // ✅ Enroll student in a course
     public void enrollStudent(int courseId, int studentId) {
         CourseStudentCrossRef crossRef = new CourseStudentCrossRef();
         crossRef.courseId = courseId;
         crossRef.studentId = studentId;
-        executorService.execute(() -> courseStudentDao.enrollStudent(crossRef));
+        executorService.execute(() ->
+                courseStudentDao.enrollStudent(crossRef)
+        );
     }
 
-    // Update student info (used in EditStudentActivity)
+    // ✅ Update student info
     public void updateStudent(Student student) {
-        executorService.execute(() -> studentDao.insertStudentVoid(student));
+        executorService.execute(() ->
+                studentDao.insertStudentVoid(student)
+        );
     }
 }

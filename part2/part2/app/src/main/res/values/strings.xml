@@ -1,21 +1,28 @@
 <resources>
     <string name="app_name">part2</string>
     <string name="todo">button</string>
+
+    <!-- Course Fields -->
     <string name="coursec">Course Code:</string>
     <string name="coursen">Course Name:</string>
     <string name="lecturern">Lecturer Name:</string>
-    <string name="name">Name</string>
     <string name="Createcourse">Create New Course</string>
     <string name="submit">Create</string>
-    <string name="hint3">Dr. Kehinde</string>
+    <string name="title_create_course">Create a New Course</string>
+
+    <!-- Course Hints -->
     <string name="hint1">e.g. CO2124</string>
     <string name="hint2">Software Architecture II</string>
+    <string name="hint3">Dr. Kehinde</string>
+
+    <!-- Validation -->
     <string name="invalid_course_code">Invalid course code (e.g., AB1234)</string>
     <string name="all_fields_required">All fields are required</string>
-    <string name="title_create_course">Create a New Course</string>
+
+    <!-- Student -->
     <string name="add_student">Add Student</string>
 
-    <!-- Hints -->
+    <!-- Student Hints -->
     <string name="hint_name">Name</string>
     <string name="hint_email">Email</string>
     <string name="hint_username">Username</string>
@@ -25,4 +32,8 @@
     <string name="desc_student_name">Student name input</string>
     <string name="desc_student_email">Student email input</string>
     <string name="desc_student_username">Student username input (disabled)</string>
+
+    <!-- Missing Strings from Layout Errors -->
+    <string name="course_list">List of courses</string>
+    <string name="add_course">Add a new course</string>
 </resources>

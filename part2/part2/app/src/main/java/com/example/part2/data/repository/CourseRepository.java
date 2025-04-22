@@ -29,7 +29,7 @@ public class CourseRepository {
         executorService = Executors.newSingleThreadExecutor();
     }
 
-    // Check if course code is unique (LiveData)
+    // ✅ Check if course code is unique (LiveData)
     public LiveData<Boolean> isCourseCodeUnique(String courseCode) {
         MediatorLiveData<Boolean> result = new MediatorLiveData<>();
         LiveData<Course> source = courseDao.getCourseByCode(courseCode);
@@ -42,29 +42,29 @@ public class CourseRepository {
         return result;
     }
 
-    //  Check course code uniqueness (blocking thread - use carefully)
+    // ✅ Check course code uniqueness (blocking thread - use carefully)
     public boolean isCourseCodeUniqueSync(String courseCode) throws ExecutionException, InterruptedException {
         return executorService.submit(() ->
                 courseDao.getCourseByCodeSync(courseCode) == null
         ).get();
     }
 
-    //  Insert new course
+    // ✅ Insert new course
     public void insertCourse(Course course) {
         executorService.execute(() -> courseDao.insertCourse(course));
     }
 
-    // Get all courses (LiveData)
+    // ✅ Get all courses (LiveData)
     public LiveData<List<Course>> getAllCoursesLive() {
         return courseDao.getAllCoursesLive();
     }
 
-    //  Task 7 - Get students enrolled in a specific course (by courseId)
+    // ✅ Task 7 - Get students enrolled in a course (by courseId)
     public LiveData<List<Student>> getStudentsInCourse(int courseId) {
         return courseDao.getStudentsInCourse(courseId);
     }
 
-    // Task 7 - Unenroll student from a course (by courseId and studentId)
+    // ✅ Task 7 - Unenroll student from course
     public void unenrollStudentFromCourse(int courseId, int studentId) {
         executorService.execute(() -> courseStudentDao.removeStudentFromCourse(courseId, studentId));
     }
