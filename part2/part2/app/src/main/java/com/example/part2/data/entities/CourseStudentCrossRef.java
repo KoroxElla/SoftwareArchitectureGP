@@ -8,8 +8,8 @@ public class CourseStudentCrossRef {
     public int studentId;
 
     public CourseStudentCrossRef(int courseId, int studentId) {
-        this.studentId = studentId;
         this.courseId = courseId;
+        this.studentId = studentId;
     }
 }
 

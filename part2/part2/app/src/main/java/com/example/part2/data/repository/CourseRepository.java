@@ -49,6 +49,10 @@ public class CourseRepository {
         executorService.execute(() -> courseDao.insertCourse(course));
     }
 
+    public void deleteCourse(Course course){
+        executorService.execute(() ->courseDao.deleteCourse(course));
+    }
+
     public LiveData<List<Course>> getAllCoursesLive() {
         return courseDao.getAllCoursesLive();
     }

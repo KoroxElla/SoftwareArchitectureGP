@@ -4,8 +4,12 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import com.example.part2.data.entities.CourseStudentCrossRef;
+import com.example.part2.data.entities.Student;
+
+import java.util.List;
 
 @Dao
 public interface CourseStudentDao {
@@ -20,4 +24,12 @@ public interface CourseStudentDao {
 
     @Query("DELETE FROM CourseStudentCrossRef WHERE studentId = :studentId")
     void removeStudentFromAllCourses(int studentId);
+
+
+    @Query("SELECT studentId FROM CourseStudentCrossRef WHERE courseId = :courseId")
+    List<Integer> getStudentIdsForCourse(int courseId);
+
+    @Transaction
+    @Query("SELECT * FROM Student WHERE studentId IN (SELECT studentId FROM CourseStudentCrossRef WHERE courseId = :courseId)")
+    List<Student> getStudentsForCourse(int courseId);
 }
