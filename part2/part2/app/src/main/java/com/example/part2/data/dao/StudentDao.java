@@ -13,7 +13,6 @@ import java.util.List;
 
 @Dao
 public interface StudentDao {
-
     @Insert
     void insertStudent(Student student);
 
@@ -23,4 +22,13 @@ public interface StudentDao {
 
     @Delete
     void deleteStudent(Student student);
+
+    @Query("SELECT * FROM Student WHERE userName = :username LIMIT 1")
+    Student getStudentByUsername(String username);
+
+    @Insert
+    long insertStudentAndGetId(Student student); // Add this for getting the ID
+
+    @Query("SELECT * FROM Student WHERE studentId = :studentId")
+    Student getStudentById(int studentId);
 }

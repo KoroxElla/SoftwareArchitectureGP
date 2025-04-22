@@ -20,6 +20,9 @@
         <!-- Background (overall window background color) -->
         <item name="android:windowBackground">@drawable/background</item>
 
+        <item name="android:textColor">@color/warm_beige</item>
+
+
         <!-- CardView default background -->
         <item name="cardViewStyle">@style/CardView.Light</item>
     </style>

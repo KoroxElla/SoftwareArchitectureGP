@@ -13,4 +13,10 @@
     <string name="invalid_course_code">Invalid course code (e.g., AB1234)</string>
     <string name="all_fields_required">All fields are required</string>
     <string name="title_create_course">Create a New Course</string>
+    <string name="Studentname">Student Name</string>
+    <string name="Studentemail">Student Email</string>
+    <string name="Studentusername">Student Username</string>
+    <string name="addstudent">Add Student</string>
+    <string name="nostudents">No students have been enrolled</string>
+    <string name="add_course">Create a new course</string>
 </resources>
