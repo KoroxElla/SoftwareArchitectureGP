@@ -10,12 +10,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.part2.data.entities.Student;
 import com.example.part2.data.repository.StudentRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 public class StudentViewModel extends AndroidViewModel {
     private final StudentRepository studentRepository;
     private final MutableLiveData<String> toastMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> studentAdded = new MutableLiveData<>();
+    private final MutableLiveData<List<Student>> courseStudents = new MutableLiveData<>();
 
     public StudentViewModel(@NonNull Application application) {
         super(application);
@@ -30,14 +32,13 @@ public class StudentViewModel extends AndroidViewModel {
         return studentAdded;
     }
 
-    private MutableLiveData<List<Student>> courseStudents = new MutableLiveData<>();
 
     public LiveData<List<Student>> getStudentsForCourse(int courseId) {
         loadStudentsForCourse(courseId);
         return courseStudents;
     }
 
-    private void loadStudentsForCourse(int courseId) {
+    public void loadStudentsForCourse(int courseId) {
         studentRepository.getStudentsForCourse(courseId, new StudentRepository.RepositoryCallback<List<Student>>() {
             @Override
             public void onSuccess(List<Student> result) {
@@ -47,23 +48,27 @@ public class StudentViewModel extends AndroidViewModel {
             @Override
             public void onError(Exception e) {
                 toastMessage.postValue("Error loading students");
+                courseStudents.postValue(Collections.emptyList());
             }
         });
     }
 
     public void addStudentToCourse(String name, String email, String username, int courseId) {
-        if (name.isEmpty() || email.isEmpty() || username.isEmpty()) {
-            toastMessage.setValue("All fields required");
+        if (name.isEmpty() || email.isEmpty()) {
+            toastMessage.setValue("Name and email are required");
             return;
         }
 
-        studentRepository.getStudentByUsername(username, new StudentRepository.RepositoryCallback<Student>() {
+        // Generate username from email if not provided
+        String finalUsername = username.isEmpty() ? generateUsernameFromEmail(email) : username;
+
+        studentRepository.getStudentByUsername(finalUsername, new StudentRepository.RepositoryCallback<Student>() {
             @Override
             public void onSuccess(Student existingStudent) {
                 if (existingStudent != null) {
                     checkEnrollmentAndAdd(courseId, existingStudent, name, email);
                 } else {
-                    createNewStudent(courseId, name, email, username);
+                    createNewStudent(courseId, name, email, finalUsername);
                 }
             }
 
@@ -73,6 +78,14 @@ public class StudentViewModel extends AndroidViewModel {
             }
         });
     }
+
+    private String generateUsernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.substring(0, email.indexOf("@"));
+        }
+        return email; // fallback if email doesn't contain @
+    }
+
 
     private void checkEnrollmentAndAdd(int courseId, Student student, String newName, String newEmail) {
         studentRepository.isStudentEnrolled(courseId, student.getStudentId(),
@@ -130,6 +143,7 @@ public class StudentViewModel extends AndroidViewModel {
                     @Override
                     public void onSuccess(Void result) {
                         studentAdded.setValue(true);
+                        loadStudentsForCourse(courseId); // Refresh the list
                     }
 
                     @Override

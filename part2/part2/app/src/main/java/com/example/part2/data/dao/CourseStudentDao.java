@@ -16,14 +16,15 @@ public interface CourseStudentDao {
     @Insert
     void enrollStudent(CourseStudentCrossRef crossRef);
 
+    @Query("SELECT COUNT(*) FROM COURSESTUDENTCROSSREF WHERE courseId = :courseId AND studentId = :studentId")
+    int isStudentEnrolled(int courseId, int studentId);
+
     @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId")
     void removeStudentsFromCourse(int courseId);
 
     @Query("DELETE FROM CourseStudentCrossRef WHERE studentId = :studentId")
     void removeStudentFromAllCourses(int studentId);
 
-    @Query("SELECT COUNT(*) FROM CourseStudentCrossRef WHERE courseId = :courseId AND studentId = :studentId")
-    int isStudentEnrolled(int courseId, int studentId);
 
     @Query("SELECT studentId FROM CourseStudentCrossRef WHERE courseId = :courseId")
     List<Integer> getStudentIdsForCourse(int courseId);

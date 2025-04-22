@@ -14,17 +14,18 @@ import java.util.List;
 @Dao
 public interface StudentDao {
     @Insert
-    void insertStudent(Student student);
+    long insertStudent(Student student);
 
     @Transaction
     @Query("SELECT * FROM Student")
     List<StudentWithCourses> getStudentsWithCourses();
 
+    @Query("SELECT * FROM Student WHERE userName = :username LIMIT 1")
+    Student getStudentByUsername(String username);
+
     @Delete
     void deleteStudent(Student student);
 
-    @Query("SELECT * FROM Student WHERE userName = :username LIMIT 1")
-    Student getStudentByUsername(String username);
 
     @Insert
     long insertStudentAndGetId(Student student); // Add this for getting the ID

@@ -8,12 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.part2.R;
-import com.example.part2.data.entities.Student;
-import com.example.part2.data.repository.StudentRepository;
 import com.example.part2.viewmodel.StudentViewModel;
 
 public class AddStudentActivity extends AppCompatActivity {
-    private EditText studentName, studentEmail, studentUsername;
+    private EditText studentName, studentEmail;
+    private Button btnAdd;
     private int courseId;
     private StudentViewModel studentViewModel;
 
@@ -21,37 +20,40 @@ public class AddStudentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_student);
-
-        studentName = findViewById(R.id.studentName);
-        studentEmail = findViewById(R.id.studentEmail);
-        studentUsername = findViewById(R.id.studentUsername);
-        Button btnAdd = findViewById(R.id.btnAddStudent);
+        setTitle("Add Student");
 
         courseId = getIntent().getIntExtra("courseId", -1);
         studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
 
-        setupObservers();
+        studentName = findViewById(R.id.studentName);
+        studentEmail = findViewById(R.id.studentEmail);
+        btnAdd = findViewById(R.id.btnAddStudent);
 
-        btnAdd.setOnClickListener(v -> {
-            String name = studentName.getText().toString().trim();
-            String email = studentEmail.getText().toString().trim();
-            String username = studentUsername.getText().toString().trim();
-            studentViewModel.addStudentToCourse(name, email, username, courseId);
-        });
-    }
-
-    private void setupObservers() {
         studentViewModel.getToastMessage().observe(this, message -> {
             if (message != null) {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
         });
 
-        studentViewModel.getStudentAdded().observe(this, added -> {
-            if (added != null && added) {
-                Toast.makeText(this, "Student added", Toast.LENGTH_SHORT).show();
+        studentViewModel.getStudentAdded().observe(this, isAdded -> {
+            if (isAdded != null && isAdded) {
                 finish();
             }
         });
+
+        btnAdd.setOnClickListener(v -> addStudent());
+    }
+
+    private void addStudent() {
+        String name = studentName.getText().toString().trim();
+        String email = studentEmail.getText().toString().trim();
+
+        if (name.isEmpty() || email.isEmpty()) {
+            Toast.makeText(this, "Name and email are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Pass empty string for username - it will be generated from email
+        studentViewModel.addStudentToCourse(name, email, "", courseId);
     }
 }

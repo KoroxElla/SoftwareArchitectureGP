@@ -42,19 +42,19 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     }
 
     static class StudentViewHolder extends RecyclerView.ViewHolder {
-        TextView studentName, studentEmail, studentUsername;
+        TextView studentName, studentEmail, studentMatric;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
             studentName = itemView.findViewById(R.id.student_name);
             studentEmail = itemView.findViewById(R.id.student_email);
-            studentUsername = itemView.findViewById(R.id.student_username);
+            studentMatric = itemView.findViewById(R.id.student_username);
         }
 
         public void bind(Student student) {
             studentName.setText(student.getName());
             studentEmail.setText(student.getEmail());
-            studentUsername.setText(student.getUserName());
+            studentMatric.setText(student.getUserName()); // This displays the matric number
         }
     }
 }

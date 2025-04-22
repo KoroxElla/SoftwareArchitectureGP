@@ -1,7 +1,5 @@
 package com.example.part2.ui.activity;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -27,11 +25,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class CourseDetailsActivity extends AppCompatActivity {
+
     private RecyclerView studentsRecyclerView;
     private StudentAdapter studentAdapter;
     private StudentViewModel studentViewModel;
     private int courseId;
-
     private TextView emptyView;
 
     @Override
@@ -39,32 +37,33 @@ public class CourseDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
-        // Enable ActionBar (if using default)
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // Disable default title
-            getSupportActionBar().setDisplayShowCustomEnabled(true); // Allow custom view
-        }
-
-        emptyView = findViewById(R.id.emptyView);
 
         // Get course ID from intent
         courseId = getIntent().getIntExtra("courseId", -1);
 
-        // Initialize RecyclerView
+        setupActionBar();
+        setupCustomTitle();
+        setupLecturer();
+
+        emptyView = findViewById(R.id.emptyView);
+
+        // RecyclerView setup
         studentsRecyclerView = findViewById(R.id.courserecycler);
         studentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         studentAdapter = new StudentAdapter(new ArrayList<>());
         studentsRecyclerView.setAdapter(studentAdapter);
 
-        // Initialize ViewModel
+        // ViewModel setup
         studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
-
-        // Observe students
         observeStudents();
 
-        setupActionBar();
-        setupCustomTitle();
-        setupLecturer();
+        // FAB to add a student
+        FloatingActionButton addStudentButton = findViewById(R.id.addStudentButton);
+        addStudentButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseDetailsActivity.this, AddStudentActivity.class);
+            intent.putExtra("courseId", courseId);
+            startActivity(intent);
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -119,7 +118,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
             if (students != null) {
                 studentAdapter.updateStudents(students);
 
-                // Show empty view if no students, otherwise show RecyclerView
                 if (students.isEmpty()) {
                     studentsRecyclerView.setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
@@ -129,12 +127,19 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Observe for student added events
+        studentViewModel.getStudentAdded().observe(this, added -> {
+            if (added != null && added) {
+                // Refresh the student list
+                studentViewModel.loadStudentsForCourse(courseId);
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // Optional: Add animation when going back
             finish();
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             return true;
@@ -142,11 +147,10 @@ public class CourseDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Optional: Also handle the physical back button
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
-}
 
+}
