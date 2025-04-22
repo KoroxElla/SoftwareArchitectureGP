@@ -15,11 +15,14 @@ import java.util.List;
 public interface StudentDao {
 
     @Insert
-    void insertStudent(Student student);
+    long insertStudent(Student student);
 
     @Transaction
     @Query("SELECT * FROM Student")
     List<StudentWithCourses> getStudentsWithCourses();
+
+    @Query("SELECT * FROM Student WHERE userName = :username LIMIT 1")
+    Student getStudentByUsername(String username);
 
     @Delete
     void deleteStudent(Student student);

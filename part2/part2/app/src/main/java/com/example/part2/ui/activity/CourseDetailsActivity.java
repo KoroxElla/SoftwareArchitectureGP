@@ -1,26 +1,26 @@
 package com.example.part2.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.example.part2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class CourseDetailsActivity extends AppCompatActivity {
+    private int courseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        //Get courseID
+        courseId = getIntent().getIntExtra("courseId", -1);
+        FloatingActionButton addStudentButton = findViewById(R.id.addStudentButton);
+        addStudentButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseDetailsActivity.this, AddStudentActivity.class);
+            intent.putExtra("courseId", courseId);
+            startActivity(intent);
         });
     }
 }

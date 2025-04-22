@@ -6,5 +6,10 @@ import androidx.room.Entity;
 public class CourseStudentCrossRef {
     public int courseId;
     public int studentId;
+
+    public CourseStudentCrossRef(int courseId, int studentId) {
+        this.studentId = studentId;
+        this.courseId = courseId;
+    }
 }
 

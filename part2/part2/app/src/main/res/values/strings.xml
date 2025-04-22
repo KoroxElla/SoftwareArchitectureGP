@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">part2</string>
-    <string name="todo">button</string>
+    <string name="add_course">Add Course</string>
     <string name="coursec">Course Code:</string>
     <string name="coursen">Course Name:</string>
     <string name="lecturern">Lecturer Name:</string>
@@ -12,5 +12,14 @@
     <string name="hint2">Software Architecture II</string>
     <string name="invalid_course_code">Invalid course code (e.g., AB1234)</string>
     <string name="all_fields_required">All fields are required</string>
+    <string name="course_list">List of courses</string>
     <string name="title_create_course">Create a New Course</string>
+    <string name="add_student">Add Student</string>
+    <string name="studentName">Student Name</string>
+    <string name="studentEmail">Email</string>
+    <string name="studentUsername">Matric Number</string>
+    <string name="hint4">Enter Student Name</string>
+    <string name="hint5">Enter Email</string>
+    <string name="hint6">Enter Matric Number</string>
+    <string name="courseCard">Course display</string>
 </resources>

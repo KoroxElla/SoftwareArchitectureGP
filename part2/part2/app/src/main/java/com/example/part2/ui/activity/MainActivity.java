@@ -10,18 +10,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.part2.R;
 import com.example.part2.data.entities.Course;
+import com.example.part2.ui.adapters.CourseAdapter;
 import com.example.part2.viewmodel.CourseViewModel;
 
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private CourseViewModel courseViewModel;
+    private RecyclerView recyclerView;
+    private CourseAdapter courseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+        recyclerView = findViewById(R.id.courseRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        courseAdapter = new CourseAdapter();
+        recyclerView.setAdapter(courseAdapter);
+
+        courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
+        courseViewModel.getAllCourses().observe(this, courses -> {
+            courseAdapter.setCourseList(courses);
         });
     }
     private void setupCourseLogging() {

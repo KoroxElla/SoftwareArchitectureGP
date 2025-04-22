@@ -12,6 +12,9 @@ public interface CourseStudentDao {
     @Insert
     void enrollStudent(CourseStudentCrossRef crossRef);
 
+    @Query("SELECT COUNT(*) FROM COURSESTUDENTCROSSREF WHERE courseId = :courseId AND studentId = :studentId")
+    int isStudentEnrolled(int courseId, int studentId);
+
     @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId")
     void removeStudentsFromCourse(int courseId);
 
