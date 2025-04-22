@@ -80,9 +80,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         }
 
         public void bind(Course course) {
-            courseCode.setText(course.getCourseCode());
-            courseName.setText(course.getCourseName());
-            lecturerName.setText(course.getLecturerName());
+            String template = "%s: %s";
+            courseCode.setText(String.format(template, "Course Code", course.getCourseCode()));
+            courseName.setText(String.format(template, "Course Name",course.getCourseName()));
+            lecturerName.setText(String.format(template, "Lecturer Name",course.getLecturerName()));
         }
     }
 }
