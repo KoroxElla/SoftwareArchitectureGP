@@ -13,4 +13,16 @@
     <string name="invalid_course_code">Invalid course code (e.g., AB1234)</string>
     <string name="all_fields_required">All fields are required</string>
     <string name="title_create_course">Create a New Course</string>
+    <string name="add_student">Add Student</string>
+
+    <!-- Hints -->
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_username">Username</string>
+    <string name="save_button">Save</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="desc_student_name">Student name input</string>
+    <string name="desc_student_email">Student email input</string>
+    <string name="desc_student_username">Student username input (disabled)</string>
 </resources>

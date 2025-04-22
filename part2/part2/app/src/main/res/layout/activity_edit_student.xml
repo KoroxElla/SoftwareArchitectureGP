@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/studentName"
+        android:id="@+id/editStudentName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/studentEmail"
+        android:id="@+id/editStudentEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
@@ -29,12 +29,12 @@
         android:autofillHints="emailAddress"
         android:importantForAccessibility="yes"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/studentName"
+        app:layout_constraintTop_toBottomOf="@id/editStudentName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/studentUsername"
+        android:id="@+id/editStudentUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
@@ -44,18 +44,18 @@
         android:enabled="false"
         android:importantForAccessibility="yes"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/studentEmail"
+        app:layout_constraintTop_toBottomOf="@id/editStudentEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btnAddStudent"
+        android:id="@+id/btnSaveChanges"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:text="@string/add_student"
+        android:text="@string/save_button"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/studentUsername"
+        app:layout_constraintTop_toBottomOf="@id/editStudentUsername"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
