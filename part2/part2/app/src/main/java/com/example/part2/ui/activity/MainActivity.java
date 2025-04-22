@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements CourseAdapter.OnC
     @Override
     public void onCourseClick(Course course) {
         Intent intent = new Intent(this, CourseDetailsActivity.class);
-        intent.putExtra("coursecode", course.getCourseCode());
-        intent.putExtra("coursename", course.getCourseName());
+        intent.putExtra("courseCode", course.getCourseCode());
+        intent.putExtra("courseName", course.getCourseName());
         intent.putExtra("lecturer", course.getLecturerName());
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

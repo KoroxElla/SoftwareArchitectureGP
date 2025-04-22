@@ -1,7 +1,6 @@
 package com.example.part2.viewmodel;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -32,14 +31,13 @@ public class StudentViewModel extends AndroidViewModel {
         return studentAdded;
     }
 
-
-    public LiveData<List<Student>> getStudentsForCourse(int courseId) {
-        loadStudentsForCourse(courseId);
+    public LiveData<List<Student>> getStudentsForCourse(String courseCode) {
+        loadStudentsForCourse(courseCode);
         return courseStudents;
     }
 
-    public void loadStudentsForCourse(int courseId) {
-        studentRepository.getStudentsForCourse(courseId, new StudentRepository.RepositoryCallback<List<Student>>() {
+    public void loadStudentsForCourse(String courseCode) {
+        studentRepository.getStudentsForCourse(courseCode, new StudentRepository.RepositoryCallback<>() {
             @Override
             public void onSuccess(List<Student> result) {
                 courseStudents.postValue(result);
@@ -53,22 +51,21 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
-    public void addStudentToCourse(String name, String email, String username, int courseId) {
-        if (name.isEmpty() || email.isEmpty()) {
-            toastMessage.setValue("Name and email are required");
+    public void addStudentToCourse(String name, String email, String matricNumber, String courseCode) {
+        if (name.isEmpty() || email.isEmpty() || matricNumber.isEmpty()) {
+            toastMessage.setValue("All fields are required");
             return;
         }
 
-        // Generate username from email if not provided
-        String finalUsername = username.isEmpty() ? generateUsernameFromEmail(email) : username;
+        String username = email.contains("@") ? email.substring(0, email.indexOf("@")) : email;
 
-        studentRepository.getStudentByUsername(finalUsername, new StudentRepository.RepositoryCallback<Student>() {
+        studentRepository.getStudentByMatric(matricNumber, new StudentRepository.RepositoryCallback<>() {
             @Override
             public void onSuccess(Student existingStudent) {
                 if (existingStudent != null) {
-                    checkEnrollmentAndAdd(courseId, existingStudent, name, email);
+                    checkEnrollmentAndAdd(courseCode, existingStudent, name, email, matricNumber);
                 } else {
-                    createNewStudent(courseId, name, email, finalUsername);
+                    createNewStudent(courseCode, name, email, matricNumber, username);
                 }
             }
 
@@ -79,55 +76,81 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
-    private String generateUsernameFromEmail(String email) {
-        if (email.contains("@")) {
-            return email.substring(0, email.indexOf("@"));
-        }
-        return email; // fallback if email doesn't contain @
+    private void checkEnrollmentAndAdd(String courseCode, Student student, String newName, String newEmail, String matricNumber) {
+        studentRepository.getCourseId(courseCode, new StudentRepository.RepositoryCallback<>() {
+            @Override
+            public void onSuccess(Integer courseId) {
+                studentRepository.isStudentEnrolled(courseId, student.getStudentId(),
+                        new StudentRepository.RepositoryCallback<>() {
+                            @Override
+                            public void onSuccess(Boolean isEnrolled) {
+                                if (isEnrolled) {
+                                    toastMessage.setValue("Student is already enrolled");
+                                } else {
+                                    updateStudentIfNeededAndEnroll(courseId, student, newName, newEmail, matricNumber);
+                                }
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                toastMessage.setValue("Error checking enrollment");
+                            }
+                        });
+            }
+
+            @Override
+            public void onError(Exception e) {
+                toastMessage.setValue("Invalid course");
+            }
+        });
     }
 
-
-    private void checkEnrollmentAndAdd(int courseId, Student student, String newName, String newEmail) {
-        studentRepository.isStudentEnrolled(courseId, student.getStudentId(),
-                new StudentRepository.RepositoryCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean isEnrolled) {
-                        if (isEnrolled) {
-                            toastMessage.setValue("Student is already enrolled");
-                        } else {
-                            updateStudentIfNeededAndEnroll(courseId, student, newName, newEmail);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        toastMessage.setValue("Error checking enrollment");
-                    }
-                });
-    }
-
-    private void updateStudentIfNeededAndEnroll(int courseId, Student student, String newName, String newEmail) {
-        boolean needsUpdate = !student.getName().equals(newName) || !student.getEmail().equals(newEmail);
+    private void updateStudentIfNeededAndEnroll(int courseId, Student student, String newName, String newEmail, String matricNumber) {
+        boolean needsUpdate = !student.getName().equals(newName) ||
+                !student.getEmail().equals(newEmail) ||
+                !student.getMatricNumber().equals(matricNumber);
 
         if (needsUpdate) {
             student.setName(newName);
             student.setEmail(newEmail);
-            // In a real app, you might want to update the student in the database here
-        }
+            student.setMatricNumber(matricNumber);
+            studentRepository.updateStudent(student, new StudentRepository.RepositoryCallback<>() {
+                @Override
+                public void onSuccess(Void result) {
+                    enrollStudent(courseId, student.getStudentId());
+                }
 
-        enrollStudent(courseId, student.getStudentId());
+                @Override
+                public void onError(Exception e) {
+                    toastMessage.setValue("Error updating student");
+                }
+            });
+        } else {
+            enrollStudent(courseId, student.getStudentId());
+        }
     }
 
-    private void createNewStudent(int courseId, String name, String email, String username) {
+    private void createNewStudent(String courseCode, String name, String email, String matricNumber, String username) {
         Student student = new Student();
         student.setName(name);
         student.setEmail(email);
+        student.setMatricNumber(matricNumber);
         student.setUserName(username);
 
-        studentRepository.insertStudent(student, new StudentRepository.RepositoryCallback<Long>() {
+        studentRepository.insertStudent(student, new StudentRepository.RepositoryCallback<>() {
             @Override
             public void onSuccess(Long studentId) {
-                enrollStudent(courseId, studentId.intValue());
+                studentRepository.getCourseId(courseCode, new StudentRepository.RepositoryCallback<>() {
+                    @Override
+                    public void onSuccess(Integer courseId) {
+                        enrollStudent(courseId, studentId.intValue());
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        toastMessage.setValue("Error getting course ID");
+                    }
+                });
             }
 
             @Override
@@ -139,11 +162,10 @@ public class StudentViewModel extends AndroidViewModel {
 
     private void enrollStudent(int courseId, int studentId) {
         studentRepository.enrollStudent(courseId, studentId,
-                new StudentRepository.RepositoryCallback<Void>() {
+                new StudentRepository.RepositoryCallback<>() {
                     @Override
                     public void onSuccess(Void result) {
                         studentAdded.setValue(true);
-                        loadStudentsForCourse(courseId); // Refresh the list
                     }
 
                     @Override

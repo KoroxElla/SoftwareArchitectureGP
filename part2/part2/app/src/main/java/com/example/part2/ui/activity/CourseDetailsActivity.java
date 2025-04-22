@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBar;
@@ -25,11 +26,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class CourseDetailsActivity extends AppCompatActivity {
-
     private RecyclerView studentsRecyclerView;
     private StudentAdapter studentAdapter;
     private StudentViewModel studentViewModel;
-    private int courseId;
+    private String courseCode;
     private TextView emptyView;
 
     @Override
@@ -38,30 +38,30 @@ public class CourseDetailsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
 
-        // Get course ID from intent
-        courseId = getIntent().getIntExtra("courseId", -1);
+        courseCode = getIntent().getStringExtra("courseCode");
+        if (courseCode == null || courseCode.isEmpty()) {
+            Toast.makeText(this, "Invalid course", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         setupActionBar();
         setupCustomTitle();
         setupLecturer();
 
         emptyView = findViewById(R.id.emptyView);
-
-        // RecyclerView setup
         studentsRecyclerView = findViewById(R.id.courserecycler);
         studentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         studentAdapter = new StudentAdapter(new ArrayList<>());
         studentsRecyclerView.setAdapter(studentAdapter);
 
-        // ViewModel setup
         studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
         observeStudents();
 
-        // FAB to add a student
         FloatingActionButton addStudentButton = findViewById(R.id.addStudentButton);
         addStudentButton.setOnClickListener(v -> {
             Intent intent = new Intent(CourseDetailsActivity.this, AddStudentActivity.class);
-            intent.putExtra("courseId", courseId);
+            intent.putExtra("courseCode", courseCode);
             startActivity(intent);
         });
 
@@ -82,22 +82,16 @@ public class CourseDetailsActivity extends AppCompatActivity {
     }
 
     private void setupCustomTitle() {
-        String courseCode = getIntent().getStringExtra("coursecode");
-        String courseName = getIntent().getStringExtra("coursename");
-
+        String courseName = getIntent().getStringExtra("courseName");
         View customTitleView = getLayoutInflater().inflate(R.layout.custom_toolbar_title, null);
         TextView topTitle = customTitleView.findViewById(R.id.top_title);
         TextView mainTitle = customTitleView.findViewById(R.id.main_title);
 
-        topTitle.setText(courseCode != null ? courseCode : "COURSE CODE");
+        topTitle.setText(courseCode);
         mainTitle.setText(courseName != null ? courseName : "COURSE NAME");
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setCustomView(customTitleView,
-                    new ActionBar.LayoutParams(
-                            ActionBar.LayoutParams.WRAP_CONTENT,
-                            ActionBar.LayoutParams.MATCH_PARENT
-                    ));
+            getSupportActionBar().setCustomView(customTitleView);
         }
     }
 
@@ -114,10 +108,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
     }
 
     private void observeStudents() {
-        studentViewModel.getStudentsForCourse(courseId).observe(this, students -> {
+        studentViewModel.getStudentsForCourse(courseCode).observe(this, students -> {
             if (students != null) {
                 studentAdapter.updateStudents(students);
-
                 if (students.isEmpty()) {
                     studentsRecyclerView.setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
@@ -128,11 +121,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
             }
         });
 
-        // Observe for student added events
-        studentViewModel.getStudentAdded().observe(this, added -> {
-            if (added != null && added) {
-                // Refresh the student list
-                studentViewModel.loadStudentsForCourse(courseId);
+        studentViewModel.getToastMessage().observe(this, message -> {
+            if (message != null) {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -141,16 +132,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
 }

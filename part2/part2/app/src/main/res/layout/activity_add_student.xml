@@ -64,6 +64,24 @@
                 android:background="@drawable/edittext_background"
                 android:inputType="textEmailAddress" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:labelFor="@id/studentMatric"
+                android:text="@string/matric"
+                android:textColor="@color/warm_beige" />
+
+            <EditText
+                android:id="@+id/studentMatric"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="@string/matric_hint"
+                android:autofillHints="username"
+                android:background="@drawable/edittext_background"
+                android:inputType="text" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

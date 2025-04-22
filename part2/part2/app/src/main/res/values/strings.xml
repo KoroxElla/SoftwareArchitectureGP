@@ -28,4 +28,6 @@
     <string name="hint5">Enter Email</string>
     <string name="hint6">Enter Matric Number</string>
     <string name="courseCard">Course display</string>
+    <string name="matric">Matric Number</string>
+    <string name="matric_hint">Enter matric number</string>
 </resources>

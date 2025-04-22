@@ -48,13 +48,13 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
             super(itemView);
             studentName = itemView.findViewById(R.id.student_name);
             studentEmail = itemView.findViewById(R.id.student_email);
-            studentMatric = itemView.findViewById(R.id.student_username);
+            studentMatric = itemView.findViewById(R.id.student_matric);
         }
 
         public void bind(Student student) {
             studentName.setText(student.getName());
             studentEmail.setText(student.getEmail());
-            studentMatric.setText(student.getUserName()); // This displays the matric number
+            studentMatric.setText(student.getMatricNumber());
         }
     }
 }
