@@ -14,7 +14,7 @@
         android:background="#9E906E"
         android:orientation="vertical"
         android:padding="8dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" >
