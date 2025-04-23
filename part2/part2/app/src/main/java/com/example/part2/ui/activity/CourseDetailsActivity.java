@@ -45,17 +45,22 @@ public class CourseDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        setupActionBar();
-        setupCustomTitle();
-        setupLecturer();
-
-        emptyView = findViewById(R.id.emptyView);
+        studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
         studentsRecyclerView = findViewById(R.id.courserecycler);
         studentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         studentAdapter = new StudentAdapter(new ArrayList<>());
         studentsRecyclerView.setAdapter(studentAdapter);
 
-        studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
+        //Delete student
+        studentAdapter.setOnStudentRemoveListener(matricNumber -> {
+            studentViewModel.removeStudentFromCourse(courseCode, matricNumber);
+            studentViewModel.loadStudentsForCourse(courseCode); //refresh list
+        });
+
+        emptyView = findViewById(R.id.emptyView);
+        setupActionBar();
+        setupCustomTitle();
+        setupLecturer();
         observeStudents();
 
         FloatingActionButton addStudentButton = findViewById(R.id.addStudentButton);
@@ -83,7 +88,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     private void setupCustomTitle() {
         String courseName = getIntent().getStringExtra("courseName");
-        View customTitleView = getLayoutInflater().inflate(R.layout.custom_toolbar_title, null);
+        View customTitleView = getLayoutInflater().inflate(R.layout.custom_toolbar_title,  studentsRecyclerView, false);
         TextView topTitle = customTitleView.findViewById(R.id.top_title);
         TextView mainTitle = customTitleView.findViewById(R.id.main_title);
 
@@ -102,7 +107,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         if (lecturer != null && !lecturer.isEmpty()) {
             lecturerView.setText(lecturer);
         } else {
-            lecturerView.setText("Lecturer not specified");
+            lecturerView.setText(R.string.lecturer_not_specified);
             lecturerView.setTextColor(ContextCompat.getColor(this, R.color.gray));
         }
     }

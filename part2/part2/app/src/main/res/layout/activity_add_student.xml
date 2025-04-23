@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -22,65 +21,67 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="373dp"
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!--Student name-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:labelFor="@id/studentName"
                 android:text="@string/studentName"
-                android:textColor="@color/warm_beige" />
+                android:textColor="@color/warm_beige"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/studentName"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:hint="@string/hint4"
+                android:layout_marginTop="8dp"
                 android:autofillHints="name"
                 android:background="@drawable/edittext_background"
-                android:inputType="textPersonName" />
+                android:hint="@string/hint4"
+                android:inputType="textPersonName"
+                android:minHeight="48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:labelFor="@id/studentEmail"
+                android:layout_marginTop="16dp"
                 android:text="@string/studentEmail"
-                android:textColor="@color/warm_beige" />
+                android:textColor="@color/warm_beige"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/studentEmail"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:hint="@string/hint5"
+                android:layout_marginTop="8dp"
                 android:autofillHints="emailAddress"
                 android:background="@drawable/edittext_background"
-                android:inputType="textEmailAddress" />
+                android:hint="@string/hint5"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:labelFor="@id/studentMatric"
+                android:layout_marginTop="16dp"
                 android:text="@string/matric"
-                android:textColor="@color/warm_beige" />
+                android:textColor="@color/warm_beige"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/studentMatric"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:hint="@string/matric_hint"
+                android:layout_marginTop="8dp"
                 android:autofillHints="username"
                 android:background="@drawable/edittext_background"
-                android:inputType="text" />
+                android:hint="@string/matric_hint"
+                android:inputType="text"
+                android:minHeight="48dp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -90,6 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:onClick="AddStudentbtn"
         android:text="@string/add_student"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

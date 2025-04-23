@@ -23,11 +23,18 @@
     <string name="add_student">Add Student</string>
     <string name="studentName">Student Name</string>
     <string name="studentEmail">Email</string>
-    <string name="studentMatricn">Matric Number</string>
     <string name="hint4">Enter Student Name</string>
     <string name="hint5">Enter Email</string>
-    <string name="hint6">e.g. 21904625</string>
+    <string name="hint6">e.g 21902345</string>
     <string name="courseCard">Course display</string>
     <string name="matric">Matric Number</string>
     <string name="matric_hint">Enter matric number</string>
+    <string name="course_code_label">Course Code: %s</string>
+    <string name="course_name_label">Course Name: %s</string>
+    <string name="lecturer_label">Lecturer: %s</string>
+    <string name="student_name_dec">studentname</string>
+    <string name="student_email_dec">studentemail</string>
+    <string name="student_matric_dec">studentmatric</string>
+    <string name="removeBtn">Remove Student</string>
+    <string name="lecturer_not_specified">Lecturer not specified</string>
 </resources>

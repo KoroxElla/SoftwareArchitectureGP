@@ -75,6 +75,10 @@ public class StudentViewModel extends AndroidViewModel {
             }
         });
     }
+    public void removeStudentFromCourse(String courseCode, String studentMatric) {
+        studentRepository.removeStudentFromCourse(courseCode, studentMatric);
+        toastMessage.postValue("Student removed from course.");
+    }
 
     private void checkEnrollmentAndAdd(String courseCode, Student student, String newName, String newEmail, String matricNumber) {
         studentRepository.getCourseId(courseCode, new StudentRepository.RepositoryCallback<>() {

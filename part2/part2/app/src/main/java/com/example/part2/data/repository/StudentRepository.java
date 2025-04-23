@@ -107,7 +107,15 @@ public class StudentRepository {
             }
         });
     }
-
+    public void removeStudentFromCourse(String courseCode, String studentMatric) {
+        executorService.execute(() -> {
+            int courseId = courseDao.getCourseIdByCode(courseCode);
+            Student student = studentDao.getStudentByMatric(studentMatric);
+            if (courseId > 0 && student != null) {
+                courseStudentDao.removeStudentFromCourse(courseId, student.getStudentId());
+            }
+        });
+    }
     public interface RepositoryCallback<T> {
         void onSuccess(T result);
         void onError(Exception e);
