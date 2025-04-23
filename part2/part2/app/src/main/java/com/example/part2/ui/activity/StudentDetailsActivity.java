@@ -83,6 +83,4 @@ public class StudentDetailsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

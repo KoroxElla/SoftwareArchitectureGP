@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "part2"
-include(":app")
+include(":app", ":part2.app")
  

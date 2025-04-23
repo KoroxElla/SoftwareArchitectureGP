@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:padding="10dp"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/maroon"
-    android:layout_marginBottom="8dp">
+    android:layout_margin="8dp"
+    app:cardElevation="6dp"
+    app:cardCornerRadius="24dp"
+    app:cardBackgroundColor="@color/maroon">
 
-    <TextView android:id="@+id/courseNameText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/coursen"
-        android:textStyle="bold"/>
+        android:orientation="vertical"
+        android:padding="16dp" >
+        <TextView
+            android:id="@+id/courseNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/coursen"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
 
-    <TextView android:id="@+id/courseCodeText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/coursec" />
+        <TextView
+            android:id="@+id/courseCodeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/coursec"
+            android:layout_marginTop="4dp"/>
 
-    <TextView android:id="@+id/lecturerText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/lecturern" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/lecturerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lecturern"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

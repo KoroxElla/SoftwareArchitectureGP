@@ -21,13 +21,12 @@ public interface CourseStudentDao {
     int isStudentEnrolled(int courseId, int studentId);
 
     // Remove all students from a specific course
-    @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId AND studentId = :studentId")
-    void removeStudentFromCourse(int courseId, int studentId);
-
-    // Remove a student from all courses
     @Query("DELETE FROM CourseStudentCrossRef WHERE studentId = :studentId")
     void removeStudentFromAllCourses(int studentId);
 
+    // Remove a student from all courses
+    @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId AND studentId = :studentId")
+    void removeStudentFromCourse(int courseId, int studentId);
 
     @Query("SELECT studentId FROM CourseStudentCrossRef WHERE courseId = :courseId")
     List<Integer> getStudentIdsForCourse(int courseId);
