@@ -50,6 +50,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         }
     }
 
+    //Load and display student details with enrolled courses
     private void loadStudentDetails() {
         studentViewModel.getStudentWithCourses(studentId).observe(this, studentWithCourses -> {
             if (studentWithCourses != null) {
