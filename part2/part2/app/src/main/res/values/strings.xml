@@ -7,11 +7,26 @@
     <string name="name">Name</string>
     <string name="Createcourse">Create New Course</string>
     <string name="submit">Create</string>
-    <string name="hint3">Dr. Kehinde</string>
     <string name="hint1">e.g. CO2124</string>
     <string name="hint2">Software Architecture II</string>
+    <string name="hint3">Dr. Kehinde</string>
+
+    <!-- Validation -->
     <string name="invalid_course_code">Invalid course code (e.g., AB1234)</string>
     <string name="all_fields_required">All fields are required</string>
+
+    <!-- Student Hints -->
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_username">Username</string>
+    <string name="save_button">Save</string>
+
+    <!-- Accessibility Descriptions -->
+    <string name="desc_student_name">Student name input</string>
+    <string name="desc_student_email">Student email input</string>
+    <string name="desc_student_username">Student username input (disabled)</string>
+
+    <!-- Missing Strings from Layout Errors -->
     <string name="course_list">List of courses</string>
     <string name="title_create_course">Create a New Course</string>
     <string name="Studentname">Student Name</string>
@@ -33,4 +48,5 @@
     <string name="course_code_label">Course Code: %s</string>
     <string name="course_name_label">Course Name: %s</string>
     <string name="lecturer_label">Lecturer: %s</string>
+
 </resources>

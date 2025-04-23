@@ -1,4 +1,5 @@
 package com.example.part2.data.entities;
+
 import androidx.room.Embedded;
 import androidx.room.Junction;
 import androidx.room.Relation;
@@ -16,4 +17,3 @@ public class CourseWithStudents {
     )
     public List<Student> students;
 }
-

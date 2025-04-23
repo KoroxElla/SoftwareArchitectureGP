@@ -1,0 +1,951 @@
+{
+	"info": {
+		"_postman_id": "2ba5653f-1634-4e94-8697-5e810891a7fc",
+		"name": "CO2124 Part1 - API Testing (Complete)",
+		"description": "Postman collection for testing all 20 API endpoints (with success and error cases) for CO2124 Project Part 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42430063"
+	},
+	"item": [
+		{
+			"name": "01 - Get All Patients (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "02 - Create Patient (Success)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"phoneNumber\": \"07000000000\",\n  \"address\": \"10 King Street\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03 - Create Patient (Error - Missing Name)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"bad@example.com\",\n  \"phoneNumber\": \"07000000000\",\n  \"address\": \"No Name Street\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04 - Get Specific Patient (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "05 - Get Specific Patient (Error - Not Found)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "06 - Update Patient (Success)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"John Updated\",\n  \"email\": \"johnupdated@example.com\",\n  \"phoneNumber\": \"07111111111\",\n  \"address\": \"20 Queen Street\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/patients/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "07 - Update Patient (Error - Not Found)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Ghost\",\n  \"email\": \"ghost@example.com\",\n  \"phoneNumber\": \"0000000000\",\n  \"address\": \"Nowhere\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/patients/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "08 - Delete Patient (Success)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "09 - Delete Patient (Error - Not Found)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10 - Get Patient Appointments (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/1/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"1",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11 - Get Patient Appointments (Error)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/9999/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"9999",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12 - Get Patient Medical Records (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/1/medical-records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"1",
+						"medical-records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "13 - Get Patient Medical Records (Error)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/patients/9999/medical-records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patients",
+						"9999",
+						"medical-records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "14 - Get All Doctors (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/doctors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "15 - Create Doctor (Success)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Dr. Smith\",\n  \"specialisation\": \"Cardiology\",\n  \"email\": \"smith@hospital.com\",\n  \"phoneNumber\": \"07011112222\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/doctors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "16 - Create Doctor (Error - Missing Name)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"specialisation\": \"Orthopedics\",\n  \"email\": \"no-name@hospital.com\",\n  \"phoneNumber\": \"07123456789\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/doctors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "17 - Get Doctor by ID (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/doctors/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "18 - Get Doctor by ID (Error)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/doctors/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "19 - Update Doctor (Success)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Dr. Updated\",\n  \"specialisation\": \"Neurology\",\n  \"email\": \"updated@hospital.com\",\n  \"phoneNumber\": \"07222223333\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/doctors/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "20 - Update Doctor (Error)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Ghost Doctor\",\n  \"specialisation\": \"Ghostology\",\n  \"email\": \"ghost@hospital.com\",\n  \"phoneNumber\": \"00000000000\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/doctors/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "21 - Delete Doctor (Success)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/doctors/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "22 - Delete Doctor (Error)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/doctors/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "23 - Get Doctor Appointments (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/doctors/1/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"1",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "24 - Get Doctor Appointments (Error)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/doctors/9999/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors",
+						"9999",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "25 - Get All Appointments (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "26 - Create Appointment (Success)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"appointmentDate\": \"2025-04-07T10:00:00\",\n  \"status\": \"Scheduled\",\n  \"notes\": \"Routine Checkup\",\n  \"patientId\": 1,\n  \"doctorId\": 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "27 - Create Appointment (Error - Missing Date)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"status\": \"Scheduled\",\n  \"notes\": \"Missing date\",\n  \"patientId\": 1,\n  \"doctorId\": 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "28 - Get Appointment by ID (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/appointments/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "29 - Get Appointment by ID (Error)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/appointments/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "30 - Update Appointment (Success)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"appointmentDate\": \"2025-04-08T15:00:00\",\n  \"status\": \"Completed\",\n  \"notes\": \"Follow-up done\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/appointments/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "31 - Update Appointment (Error)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"appointmentDate\": \"2025-04-08T15:00:00\",\n  \"status\": \"Completed\",\n  \"notes\": \"Invalid\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/appointments/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "32 - Delete Appointment (Success)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/appointments/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "33 - Delete Appointment (Error)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/appointments/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "34 - Get Medical Record by Appointment (Success)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/appointments/1/medical-record",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"1",
+						"medical-record"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "35 - Get Medical Record by Appointment (Error)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/appointments/9999/medical-record",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments",
+						"9999",
+						"medical-record"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "36 - Create Medical Record (Success)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recordDate\": \"2025-04-07T11:00:00\",\n  \"diagnosis\": \"Flu\",\n  \"treatment\": \"Rest, fluids, and paracetamol\",\n  \"notes\": \"Should recover in 3-5 days\",\n  \"appointmentId\": 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/medical-records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medical-records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "37 - Create Medical Record (Error - Missing Diagnosis)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recordDate\": \"2025-04-07T11:00:00\",\n  \"treatment\": \"Rest\",\n  \"notes\": \"Missing diagnosis\",\n  \"appointmentId\": 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/medical-records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medical-records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "38 - Update Medical Record (Error - Not Supported)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recordDate\": \"2025-04-08T12:00:00\",\n  \"diagnosis\": \"Updated Diagnosis\",\n  \"treatment\": \"New treatment\",\n  \"notes\": \"Updated notes\",\n  \"appointmentId\": 9999\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/medical-records/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medical-records",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "39 - GET /medical-records (Error - Invalid usage)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/medical-records/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medical-records",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "40 - Create Medical Record (Error - Invalid Appointment)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recordDate\": \"2025-04-08T12:00:00\",\n  \"diagnosis\": \"Cold\",\n  \"treatment\": \"Rest\",\n  \"notes\": \"Invalid appointment\",\n  \"appointmentId\": 9999\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/medical-records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medical-records"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

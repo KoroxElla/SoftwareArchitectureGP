@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.part2.data.entities.Student;
+import com.example.part2.data.entities.StudentWithCourses;
 import com.example.part2.data.repository.StudentRepository;
 
 import java.util.Collections;
@@ -173,5 +174,20 @@ public class StudentViewModel extends AndroidViewModel {
                         toastMessage.setValue("Error enrolling student");
                     }
                 });
+    }
+}
+    // For Task 6 - Show student with enrolled courses
+    public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
+        return StudentRepository.getStudentWithCourses(userName);
+    }
+
+    // For EditStudentActivity - get basic Student by username
+    public LiveData<Student> getStudentByUsername(String userName) {
+        return StudentRepository.getStudentByUsername(userName);
+    }
+
+    // For EditStudentActivity - update student record
+    public void updateStudent(Student student) {
+        StudentRepository.updateStudent(student);
     }
 }

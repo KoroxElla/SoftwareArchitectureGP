@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Student {
     @PrimaryKey(autoGenerate = true)
-    private int studentId;  // Internal ID (not displayed)
+    private int studentId;
 
     private String matricNumber;  // Matriculation number (displayed)
     private String name;

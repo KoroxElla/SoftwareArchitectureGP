@@ -1,18 +1,25 @@
 package com.example.part2.data.repository;
 
 import android.app.Application;
+
+import androidx.lifecycle.LiveData;
+
 import com.example.part2.data.dao.AppDatabase;
 import com.example.part2.data.dao.CourseDao;
 import com.example.part2.data.dao.CourseStudentDao;
 import com.example.part2.data.dao.StudentDao;
+import com.example.part2.data.dao.CourseStudentDao;
 import com.example.part2.data.entities.CourseStudentCrossRef;
 import com.example.part2.data.entities.Student;
+import com.example.part2.data.entities.StudentWithCourses;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class StudentRepository {
+
     private final StudentDao studentDao;
     private final CourseStudentDao courseStudentDao;
     private final CourseDao courseDao;
@@ -40,6 +47,27 @@ public class StudentRepository {
                 callback.onError(e);
             }
         });
+    }
+    // ✅ Task 6 - Get student and courses
+    public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
+        return studentDao.getStudentWithCourses(userName);
+    }
+
+    // ✅ Task 7 - For editing student data (LiveData)
+    public LiveData<Student> getStudentByUsername(String userName) {
+        return studentDao.getStudentByUsername(userName);
+    }
+
+    // ✅ Sync method (used in AddStudentActivity or background logic)
+    public Student getStudentByUsernameSync(String username) {
+        try {
+            return executorService.submit(() ->
+                    studentDao.getStudentByUsernameSync(username)
+            ).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace(); // Consider using Log.e(TAG, "error", e) in production
+            return null;
+        }
     }
 
     public void getCourseId(String courseCode, RepositoryCallback<Integer> callback) {
@@ -84,6 +112,17 @@ public class StudentRepository {
                 callback.onError(e);
             }
         });
+        // ✅ Insert student and return the generated ID
+        public long insertAndGetId(Student student) {
+            try {
+                return executorService.submit(() ->
+                        studentDao.insertStudent(student)
+                ).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        }
     }
 
     public void isStudentEnrolled(int courseId, int studentId, RepositoryCallback<Boolean> callback) {
@@ -111,5 +150,11 @@ public class StudentRepository {
     public interface RepositoryCallback<T> {
         void onSuccess(T result);
         void onError(Exception e);
+    }
+    // ✅ Update student info
+    public void updateStudent(Student student) {
+        executorService.execute(() ->
+                studentDao.insertStudentVoid(student)
+        );
     }
 }

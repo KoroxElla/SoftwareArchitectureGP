@@ -21,6 +21,20 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         this.students = newStudents;
         notifyDataSetChanged();
     }
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Student student);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setStudentList(List<Student> students) {
+        this.students = students;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -30,10 +44,17 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         return new StudentViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
         Student student = students.get(position);
         holder.bind(student);
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(student);
+            }
+        });
     }
 
     @Override
