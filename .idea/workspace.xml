@@ -4,43 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="30b15b48-b5ad-4deb-9c79-d2f2a9c7654c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/part1/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/part1/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/src/main/java/com/example/part1/configuration/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/part1/src/main/java/com/example/part1/configuration/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part1/src/main/resources/part1.postman_collection.json" beforeDir="false" afterPath="$PROJECT_DIR$/part1/src/main/resources/part1.postman_collection.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/Part1Application.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/configuration/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/controller/AppointmentRestController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/controller/DoctorRestController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/controller/MedicalRecordRestController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/controller/PatientRestController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/domain/Appointments.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/domain/Doctor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/domain/MedicalRecord.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/domain/Patient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/repo/AppointmentRepo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/repo/DoctorRepo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/repo/PatientRepo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/part1/repo/RecordRepo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-test.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/part1.postman_collection.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/part1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/part1/Part1ApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="30b15b48-b5ad-4deb-9c79-d2f2a9c7654c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
