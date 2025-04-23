@@ -1,30 +1,39 @@
 package com.example.part1.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Entity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import java.util.List;
 
-@Entity
+/**
+ * Represents a Patient in the healthcare system.
+ * A patient can have multiple appointments with one or more doctors.
+ */
+@Entity // Marks this class as a JPA entity (maps to a database table)
 public class Patient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private String address;
 
-    //One patient many appointments and records
+    @Id // Marks this field as the primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increments the ID
+    private Long id; // Unique identifier for the patient
+
+    private String name; // Full name of the patient
+    private String email; // Email address of the patient
+    private String phoneNumber; // Contact number of the patient
+    private String address; // Physical address of the patient
+
+    /**
+     * One-to-Many relationship with Appointments.
+     * - A patient can have multiple appointments.
+     * - `mappedBy = "patient"` indicates that the `Appointments` entity owns the relationship.
+     * - `cascade = CascadeType.ALL` ensures that operations (save, delete, etc.) cascade to appointments.
+     * - `orphanRemoval = true` removes appointments if they are no longer linked to this patient.
+     * - `@JsonManagedReference` prevents JSON infinite recursion (forward part of the reference).
+     */
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("patient-appointments")
     private List<Appointments> appointments;
 
-    //Getters and setters
+    // ========== Getters & Setters ========== //
+
     public Long getId() {
         return id;
     }

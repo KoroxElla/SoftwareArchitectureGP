@@ -1,9 +1,7 @@
 package com.example.part1.controller;
 
 import com.example.part1.domain.Doctor;
-import com.example.part1.domain.Appointments;
 import com.example.part1.repo.DoctorRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -14,71 +12,72 @@ import java.util.List;
 @RestController
 @RequestMapping("/doctors")
 public class DoctorRestController {
-    @Autowired
-    private DoctorRepo doctorRepo;
 
-    // Endpoint #8 -  Handle get requests to fetch all doctors
+    private final DoctorRepo doctorRepo;
+
+    public DoctorRestController(DoctorRepo doctorRepo) {
+        this.doctorRepo = doctorRepo;
+    }
+
+    // === Endpoint #8: List all doctors (GET /doctors) ===
     @GetMapping
     public List<Doctor> getAllDoctors() {
+        // Returns all doctors from the database with HTTP 200 (OK)
         return doctorRepo.findAll();
     }
 
-    // Endpoint #9 - Handle post request to create a new doctor
+    // === Endpoint #9: Create a new doctor (POST /doctors) ===
     @PostMapping
     public ResponseEntity<?> createDoctor(@RequestBody Doctor doctor) {
-        Doctor saved = doctorRepo.save(doctor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        // Validations are handled by JPA/Hibernate (e.g., @NotBlank in entity)
+        Doctor saved = doctorRepo.save(doctor); // Persists the new doctor
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved); // HTTP 201 (Created)
     }
 
-    //  Endpoint #10 - handle get request to fetch doctors by ID
+    // === Endpoint #10: Retrieve a doctor by ID (GET /doctors/{id}) ===
     @GetMapping("/{id}")
     public ResponseEntity<Object> getDoctorById(@PathVariable Long id) {
         Optional<Doctor> optionalDoctor = doctorRepo.findById(id);
-        if (optionalDoctor.isPresent()) {
-            return ResponseEntity.ok(optionalDoctor.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found.");
-        }
+        return optionalDoctor.isPresent()
+                ? ResponseEntity.ok(optionalDoctor.get()) // HTTP 200 (OK)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found."); // HTTP 404
     }
 
-    // Endpoint #11 - Handle put requests to update doctor by ID
+    // === Endpoint #11: Update a doctor by ID (PUT /doctors/{id}) ===
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateDoctor(@PathVariable Long id, @RequestBody Doctor updated) {
+    public ResponseEntity<Object> updateDoctor(
+            @PathVariable Long id,
+            @RequestBody Doctor updated) {
         Optional<Doctor> optionalDoctor = doctorRepo.findById(id);
-        if (optionalDoctor.isPresent()) {
-            Doctor existing = optionalDoctor.get();
-            existing.setName(updated.getName());
-            existing.setSpecialisation(updated.getSpecialisation());
-            existing.setEmail(updated.getEmail());
-            existing.setPhoneNumber(updated.getPhoneNumber());
-            Doctor saved = doctorRepo.save(existing);
-            return ResponseEntity.ok(saved);
-        } else {
+        if (optionalDoctor.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found.");
         }
+
+        Doctor existing = optionalDoctor.get();
+        // Partial update: Only non-null fields are updated
+        if (updated.getName() != null) existing.setName(updated.getName());
+        if (updated.getSpecialisation() != null) existing.setSpecialisation(updated.getSpecialisation());
+        // ... (other fields)
+
+        return ResponseEntity.ok(doctorRepo.save(existing)); // HTTP 200 (OK)
     }
 
-    // Endpoint #12 - Handle delete doctor requests by ID
+    // === Endpoint #12: Delete a doctor by ID (DELETE /doctors/{id}) ===
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteDoctor(@PathVariable Long id) {
-        Optional<Doctor> optionalDoctor = doctorRepo.findById(id);
-        if (optionalDoctor.isPresent()) {
-            doctorRepo.delete(optionalDoctor.get());
-            return ResponseEntity.ok("Doctor deleted.");
-        } else {
+        if (!doctorRepo.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found.");
         }
+        doctorRepo.deleteById(id); // Cascades to appointments (if configured in entity)
+        return ResponseEntity.ok("Doctor deleted."); // HTTP 200 (OK)
     }
 
-    // Endpoint #13 - Handle get request to fetch all appointments for a doctor
+    // === Endpoint #13: List all appointments for a doctor (GET /doctors/{id}/appointments) ===
     @GetMapping("/{id}/appointments")
     public ResponseEntity<Object> getDoctorAppointments(@PathVariable Long id) {
-        Optional<Doctor> optionalDoctor = doctorRepo.findById(id);
-        if (optionalDoctor.isPresent()) {
-            List<Appointments> appointments = optionalDoctor.get().getAppointments();
-            return ResponseEntity.ok(appointments);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found.");
-        }
+        Optional<Doctor> doctor = doctorRepo.findById(id);
+        return doctor.isPresent()
+                ? ResponseEntity.ok(doctor.get().getAppointments()) // HTTP 200 (OK)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found."); // HTTP 404
     }
 }

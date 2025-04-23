@@ -71,12 +71,12 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editStudentUsername"
+                android:id="@+id/editStudentMatric"
                 android:layout_width="284dp"
                 android:layout_height="wrap_content"
-                android:autofillHints="username"
+                android:autofillHints="matric"
                 android:enabled="false"
-                android:hint="@string/hint_username"
+                android:hint="@string/hint_matric"
                 android:background="@drawable/edittext_background"
                 android:importantForAccessibility="yes"
                 android:inputType="text"
