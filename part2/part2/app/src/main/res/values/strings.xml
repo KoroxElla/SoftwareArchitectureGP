@@ -18,7 +18,7 @@
     <!-- Student Hints -->
     <string name="hint_name">Name</string>
     <string name="hint_email">Email</string>
-    <string name="hint_username">Username</string>
+    <string name="hint_matric">Matriculation Number</string>
     <string name="save_button">Save</string>
 
     <!-- Accessibility Descriptions -->

@@ -48,7 +48,7 @@ public class EditStudentActivity extends AppCompatActivity {
             if (student != null) {
                 binding.editStudentName.setText(student.getName());
                 binding.editStudentEmail.setText(student.getEmail());
-                binding.editStudentUsername.setText(student.getMatricNumber());
+                binding.editStudentMatric.setText(student.getMatricNumber());
             }
         });
     }
@@ -57,7 +57,7 @@ public class EditStudentActivity extends AppCompatActivity {
         binding.btnSaveChanges.setOnClickListener(v -> {
             String name = binding.editStudentName.getText().toString();
             String email = binding.editStudentEmail.getText().toString();
-            String matric = binding.editStudentUsername.getText().toString();
+            String matric = binding.editStudentMatric.getText().toString();
 
             if (name.isEmpty() || email.isEmpty() || matric.isEmpty()) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
