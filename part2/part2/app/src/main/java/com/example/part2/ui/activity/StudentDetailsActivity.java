@@ -1,55 +1,88 @@
 package com.example.part2.ui.activity;
 
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.part2.R;
+import com.example.part2.data.entities.Student;
+import com.example.part2.databinding.ActivityStudentDetailsBinding;
 import com.example.part2.viewmodel.StudentViewModel;
-import com.example.part2.data.entities.StudentWithCourses;
 import com.example.part2.ui.adapters.CourseInStudentAdapter;
 
 public class StudentDetailsActivity extends AppCompatActivity {
-
-    private TextView nameTextView, emailTextView, usernameTextView;
-    private RecyclerView coursesRecyclerView;
+    private ActivityStudentDetailsBinding binding;
     private StudentViewModel studentViewModel;
-    private String studentUserName;
+    private int studentId;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_details);
+        binding = ActivityStudentDetailsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setTitle("Student Details");
 
-        // Initialize views
-        nameTextView = findViewById(R.id.studentName);
-        emailTextView = findViewById(R.id.studentEmail);
-        usernameTextView = findViewById(R.id.studentUsername);
-        coursesRecyclerView = findViewById(R.id.studentCoursesRecyclerView);
 
-        // Setup adapter
-        CourseInStudentAdapter adapter = new CourseInStudentAdapter();
-        coursesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        coursesRecyclerView.setAdapter(adapter);
 
-        // Get student userName from intent
-        studentUserName = getIntent().getStringExtra("studentUserName");
-
-        // ViewModel
         studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
-        studentViewModel.getStudentWithCourses(studentUserName).observe(this, studentWithCourses -> {
-            if (studentWithCourses != null) {
-                nameTextView.setText(studentWithCourses.student.getName());
-                emailTextView.setText(studentWithCourses.student.getEmail());
-                usernameTextView.setText(studentWithCourses.student.getUserName());
+        studentId = getIntent().getIntExtra("studentId", -1);
 
-                // Set course list
-                adapter.setCourseList(studentWithCourses.courses);
+        if (studentId != -1) {
+            loadStudentDetails();
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage("Student ID not found")
+                    .setPositiveButton("OK", (dialog, which) -> finish())
+                    .setCancelable(false)
+                    .show();
+        }
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void loadStudentDetails() {
+        studentViewModel.getStudentWithCourses(studentId).observe(this, studentWithCourses -> {
+            if (studentWithCourses != null) {
+                Student student = studentWithCourses.student;
+                binding.studentName.setText(student.getName());
+                binding.studentEmail.setText(student.getEmail());
+                binding.studentMatric.setText(student.getMatricNumber());
+
+                // Setup courses RecyclerView
+                if (studentWithCourses.courses != null && !studentWithCourses.courses.isEmpty()) {
+                    CourseInStudentAdapter adapter = new CourseInStudentAdapter(studentWithCourses.courses);
+                    binding.coursesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    binding.coursesRecyclerView.setAdapter(adapter);
+                } else {
+                    TextView noCourses = new TextView(this);
+                    noCourses.setText("No enrolled courses");
+                    noCourses.setTextSize(16);
+                    noCourses.setGravity(Gravity.CENTER);
+                    binding.coursesRecyclerView.setVisibility(View.GONE);
+                    ((ViewGroup) binding.getRoot()).addView(noCourses);
+                }
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // just close this activity and go back
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

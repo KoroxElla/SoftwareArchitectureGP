@@ -1,5 +1,6 @@
 package com.example.part2.ui.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.part2.R;
 import com.example.part2.data.entities.Student;
+
 import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
     private List<Student> students;
+    private Context context;
 
-    public StudentAdapter(List<Student> students) {
+    public StudentAdapter(List<Student> students, Context context) {
         this.students = students;
+        this.context = context;
     }
 
     public void updateStudents(List<Student> newStudents) {

@@ -53,7 +53,7 @@ public class CourseViewModel extends AndroidViewModel {
     public void delete(Course course) {
         courseRepository.deleteCourse(course);
     }
-}
+
 
     // Task 7: Get all students enrolled in a course (by courseId)
     public LiveData<List<Student>> getStudentsInCourse(int courseId) {

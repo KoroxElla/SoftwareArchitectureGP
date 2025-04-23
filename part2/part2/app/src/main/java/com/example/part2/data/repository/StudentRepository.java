@@ -8,7 +8,6 @@ import com.example.part2.data.dao.AppDatabase;
 import com.example.part2.data.dao.CourseDao;
 import com.example.part2.data.dao.CourseStudentDao;
 import com.example.part2.data.dao.StudentDao;
-import com.example.part2.data.dao.CourseStudentDao;
 import com.example.part2.data.entities.CourseStudentCrossRef;
 import com.example.part2.data.entities.Student;
 import com.example.part2.data.entities.StudentWithCourses;
@@ -48,15 +47,6 @@ public class StudentRepository {
             }
         });
     }
-    // ✅ Task 6 - Get student and courses
-    public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
-        return studentDao.getStudentWithCourses(userName);
-    }
-
-    // ✅ Task 7 - For editing student data (LiveData)
-    public LiveData<Student> getStudentByUsername(String userName) {
-        return studentDao.getStudentByUsername(userName);
-    }
 
     // ✅ Sync method (used in AddStudentActivity or background logic)
     public Student getStudentByUsernameSync(String username) {
@@ -95,7 +85,7 @@ public class StudentRepository {
     public void insertStudent(Student student, RepositoryCallback<Long> callback) {
         executorService.execute(() -> {
             try {
-                long id = studentDao.insertStudentAndGetId(student);
+                long id = studentDao.insertStudent(student);
                 callback.onSuccess(id);
             } catch (Exception e) {
                 callback.onError(e);
@@ -112,6 +102,7 @@ public class StudentRepository {
                 callback.onError(e);
             }
         });
+        }
         // ✅ Insert student and return the generated ID
         public long insertAndGetId(Student student) {
             try {
@@ -123,6 +114,10 @@ public class StudentRepository {
                 return -1;
             }
         }
+    public void deleteStudent(Student student) {
+        executorService.execute(() ->
+                studentDao.deleteStudent(student)
+        );
     }
 
     public void isStudentEnrolled(int courseId, int studentId, RepositoryCallback<Boolean> callback) {
@@ -151,10 +146,32 @@ public class StudentRepository {
         void onSuccess(T result);
         void onError(Exception e);
     }
-    // ✅ Update student info
-    public void updateStudent(Student student) {
-        executorService.execute(() ->
-                studentDao.insertStudentVoid(student)
-        );
+    // Add these LiveData methods:
+    public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
+        return studentDao.getStudentWithCoursesByUserName(userName);
+    }
+
+    // LiveData version
+    public LiveData<Student> getStudentByUsernameLive(String userName) {
+        return studentDao.getStudentByUsernameLive(userName);
+    }
+
+    public LiveData<StudentWithCourses> getStudentWithCourses(int studentId) {
+        return studentDao.getStudentWithCoursesById(studentId);
+    }
+
+    public void unenrollStudent(int courseId, int studentId, RepositoryCallback<Void> callback) {
+        executorService.execute(() -> {
+            try {
+                courseStudentDao.unenrollStudent(courseId, studentId);
+                callback.onSuccess(null);
+            } catch (Exception e) {
+                callback.onError(e);
+            }
+        });
+    }
+
+    public LiveData<Student> getStudentById(int studentId) {
+        return studentDao.getStudentById(studentId);
     }
 }

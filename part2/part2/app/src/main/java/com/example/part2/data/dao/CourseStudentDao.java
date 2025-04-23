@@ -1,7 +1,6 @@
 package com.example.part2.data.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -36,5 +35,8 @@ public interface CourseStudentDao {
     @Transaction
     @Query("SELECT * FROM Student WHERE studentId IN (SELECT studentId FROM CourseStudentCrossRef WHERE courseId = :courseId)")
     List<Student> getStudentsForCourse(int courseId);
+
+    @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId AND studentId = :studentId")
+    void unenrollStudent(int courseId, int studentId);
 }
 

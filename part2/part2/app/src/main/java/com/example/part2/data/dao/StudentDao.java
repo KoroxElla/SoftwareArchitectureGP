@@ -17,45 +17,47 @@ import java.util.List;
 @Dao
 public interface StudentDao {
 
-    // Insert and return studentId
+    // Insert operations
     @Insert
-    long insertStudent(Student student);
+    long insertStudent(Student student);  // Returns the new studentId
 
-    // Used in EditStudentActivity (updates student without returning ID)
-    @Insert
-    void insertStudentVoid(Student student);
-
-    // Get all students with their courses (not required unless needed)
-    @Transaction
-    @Query("SELECT * FROM Student")
-    List<StudentWithCourses> getStudentsWithCourses();
-
-
-    @Query("SELECT * FROM Student WHERE matricNumber = :matricNumber LIMIT 1")
-    Student getStudentByMatric(String matricNumber);
-
+    // Delete operation
     @Delete
     void deleteStudent(Student student);
 
+    // Update operation
     @Update
     void updateStudent(Student student);
 
-    @Insert
-    long insertStudentAndGetId(Student student); // Add this for getting the ID
-
+    // Single student queries (LiveData)
     @Query("SELECT * FROM Student WHERE studentId = :studentId")
-    Student getStudentById(int studentId);
-    // ✅ Task 6 - Get one student and their enrolled courses (LiveData)
-    @Transaction
-    @Query("SELECT * FROM Student WHERE userName = :userName")
-    LiveData<StudentWithCourses> getStudentWithCourses(String userName);
+    LiveData<Student> getStudentById(int studentId);
 
-    // ✅ Task 7 - Get student by username (LiveData for observing in UI)
     @Query("SELECT * FROM Student WHERE userName = :userName LIMIT 1")
-    LiveData<Student> getStudentByUsername(String userName);
+    LiveData<Student> getStudentByUsernameLive(String userName);
 
-    // ✅ Task 7 - Get student by username (Sync version for threads)
+    // Single student queries (sync)
+    @Query("SELECT * FROM Student WHERE matricNumber = :matricNumber LIMIT 1")
+    Student getStudentByMatric(String matricNumber);
+
     @Query("SELECT * FROM Student WHERE userName = :userName LIMIT 1")
     Student getStudentByUsernameSync(String userName);
 
+    // Student with courses relationships (LiveData)
+    @Transaction
+    @Query("SELECT * FROM Student WHERE userName = :userName")
+    LiveData<StudentWithCourses> getStudentWithCoursesByUserName(String userName);
+
+    @Transaction
+    @Query("SELECT * FROM Student WHERE studentId = :studentId")
+    LiveData<StudentWithCourses> getStudentWithCoursesById(int studentId);
+
+    // All students queries
+    @Transaction
+    @Query("SELECT * FROM Student")
+    LiveData<List<StudentWithCourses>> getAllStudentsWithCourses();
+
+    @Transaction
+    @Query("SELECT * FROM Student")
+    List<StudentWithCourses> getStudentsWithCoursesSync();
 }

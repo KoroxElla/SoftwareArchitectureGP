@@ -17,6 +17,10 @@ public class CourseInStudentAdapter extends RecyclerView.Adapter<CourseInStudent
 
     private List<Course> courseList;
 
+    public CourseInStudentAdapter(List<Course> courseList) {
+        this.courseList = courseList;
+    }
+
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
         notifyDataSetChanged();

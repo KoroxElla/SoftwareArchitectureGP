@@ -20,6 +20,13 @@
         <activity
             android:name=".ui.activity.AddStudentActivity"
             android:exported="false" />
+        <activity android:name=".ui.activity.StudentDetailsActivity"
+            android:parentActivityName=".ui.activity.CourseDetailsActivity"
+            android:exported="false" />
+        <activity android:name=".ui.activity.EditStudentActivity"
+            android:parentActivityName=".ui.activity.CourseDetailsActivity"
+            android:exported="false" />
+
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true">

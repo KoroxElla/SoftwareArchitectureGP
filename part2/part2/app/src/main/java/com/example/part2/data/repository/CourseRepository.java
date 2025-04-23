@@ -54,15 +54,14 @@ public class CourseRepository {
         executorService.execute(() -> courseDao.insertCourse(course));
     }
 
-    public void deleteCourse(Course course){
-        executorService.execute(() ->courseDao.deleteCourse(course));
+    public void deleteCourse(Course course) {
+        executorService.execute(() -> courseDao.deleteCourse(course));
     }
 
     // ✅ Get all courses (LiveData)
     public LiveData<List<Course>> getAllCoursesLive() {
         return courseDao.getAllCoursesLive();
     }
-}
 
     // ✅ Task 7 - Get students enrolled in a course (by courseId)
     public LiveData<List<Student>> getStudentsInCourse(int courseId) {

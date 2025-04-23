@@ -48,5 +48,9 @@
     <string name="course_code_label">Course Code: %s</string>
     <string name="course_name_label">Course Name: %s</string>
     <string name="lecturer_label">Lecturer: %s</string>
+    <string name="enroll">Enrolled Courses:</string>
+    <string name="new_name">Enter New Name:</string>
+    <string name="new_email">Enter New Email:</string>
+    <string name="new_matric">Enter New Matric Number:</string>
 
 </resources>
