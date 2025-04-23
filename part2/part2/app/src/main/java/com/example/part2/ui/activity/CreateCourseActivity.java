@@ -102,6 +102,7 @@ public class CreateCourseActivity extends AppCompatActivity {
                 // Only proceed if code is unique
                 Course course = new Course(coursecode, coursename, lecturename);
                 courseViewModel.addCourse(course);
+                submitButton.setEnabled(true);
 
                 // Log and navigate
                 Log.d("CreateCourse", "Added course - Code: " + coursecode

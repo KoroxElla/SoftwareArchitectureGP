@@ -31,7 +31,9 @@ public class StudentViewModel extends AndroidViewModel {
     public LiveData<Boolean> getStudentAdded() {
         return studentAdded;
     }
-
+    public void resetStudentAddedFlag() {
+        studentAdded.setValue(false);
+    }
     public LiveData<List<Student>> getStudentsForCourse(String courseCode) {
         loadStudentsForCourse(courseCode);
         return courseStudents;
@@ -72,7 +74,7 @@ public class StudentViewModel extends AndroidViewModel {
 
             @Override
             public void onError(Exception e) {
-                toastMessage.setValue("Error checking student");
+                toastMessage.postValue("Error checking student");
             }
         });
     }
@@ -90,7 +92,7 @@ public class StudentViewModel extends AndroidViewModel {
                             @Override
                             public void onSuccess(Boolean isEnrolled) {
                                 if (isEnrolled) {
-                                    toastMessage.setValue("Student is already enrolled");
+                                    toastMessage.postValue("Student is already enrolled");
                                 } else {
                                     updateStudentIfNeededAndEnroll(courseId, student, newName, newEmail, matricNumber);
                                 }
@@ -98,14 +100,14 @@ public class StudentViewModel extends AndroidViewModel {
 
                             @Override
                             public void onError(Exception e) {
-                                toastMessage.setValue("Error checking enrollment");
+                                toastMessage.postValue("Error checking enrollment");
                             }
                         });
             }
 
             @Override
             public void onError(Exception e) {
-                toastMessage.setValue("Invalid course");
+                toastMessage.postValue("Invalid course");
             }
         });
     }
@@ -153,7 +155,7 @@ public class StudentViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(Exception e) {
-                        toastMessage.setValue("Error getting course ID");
+                        toastMessage.postValue("Could not enroll student in course. Please try again.");
                     }
                 });
             }
@@ -170,12 +172,12 @@ public class StudentViewModel extends AndroidViewModel {
                 new StudentRepository.RepositoryCallback<>() {
                     @Override
                     public void onSuccess(Void result) {
-                        studentAdded.setValue(true);
+                        toastMessage.postValue(null);
+                        studentAdded.postValue(true);
                     }
-
                     @Override
                     public void onError(Exception e) {
-                        toastMessage.setValue("Error enrolling student");
+                        toastMessage.postValue("Error enrolling student");
                     }
                 });
     }
@@ -213,11 +215,12 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
-    public void unenrollStudent(int courseId, int studentId) {
+    public void unenrollStudent(int courseId, int studentId, String courseCode) {
         studentRepository.unenrollStudent(courseId, studentId, new StudentRepository.RepositoryCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
                 toastMessage.postValue("Student removed from course");
+                loadStudentsForCourse(courseCode);
             }
 
             @Override
@@ -230,5 +233,4 @@ public class StudentViewModel extends AndroidViewModel {
     public void getCourseId(String courseCode, StudentRepository.RepositoryCallback<Integer> callback) {
         studentRepository.getCourseId(courseCode, callback);
     }
-
 }

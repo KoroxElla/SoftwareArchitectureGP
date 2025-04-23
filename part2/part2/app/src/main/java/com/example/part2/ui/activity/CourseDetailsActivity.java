@@ -54,12 +54,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
         studentAdapter = new StudentAdapter(new ArrayList<>(), this);
         studentsRecyclerView.setAdapter(studentAdapter);
 
-        //Delete student
-        studentAdapter.setOnStudentRemoveListener(matricNumber -> {
-            studentViewModel.removeStudentFromCourse(courseCode, matricNumber);
-            studentViewModel.loadStudentsForCourse(courseCode); //refresh list
-        });
-
         emptyView = findViewById(R.id.emptyView);
         setupActionBar();
         setupCustomTitle();
@@ -70,7 +64,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
         addStudentButton.setOnClickListener(v -> {
             Intent intent = new Intent(CourseDetailsActivity.this, AddStudentActivity.class);
             intent.putExtra("courseCode", courseCode);
-
             startActivity(intent);
         });
 
@@ -117,26 +110,26 @@ public class CourseDetailsActivity extends AppCompatActivity {
     }
 
     private void observeStudents() {
+        TextView studentsHeading = findViewById(R.id.studentsHeading);
         studentViewModel.getStudentsForCourse(courseCode).observe(this, students -> {
-            if (students != null) {
-                studentAdapter = new StudentAdapter(students, this);
-                studentsRecyclerView.setAdapter(studentAdapter);
-
-                // Set click listener for student items
-                studentAdapter.setOnItemClickListener(student -> {
-                    showStudentOptionsDialog(student);
-                });
-
-                if (students.isEmpty()) {
-                    studentsRecyclerView.setVisibility(View.GONE);
-                    emptyView.setVisibility(View.VISIBLE);
-                } else {
-                    studentsRecyclerView.setVisibility(View.VISIBLE);
-                    emptyView.setVisibility(View.GONE);
-                }
+            if (students != null && !students.isEmpty()) {
+                studentsHeading.setVisibility(View.VISIBLE);
+                studentAdapter.setStudentList(students);
+                studentsRecyclerView.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
+            } else {
+                studentsHeading.setVisibility(View.GONE);
+                studentsRecyclerView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
             }
         });
+        studentsRecyclerView.setAdapter(studentAdapter);
 
+        // Click listener
+        studentAdapter.setOnItemClickListener(student -> {
+            showStudentOptionsDialog(student);
+        });
+        // Toast observer
         studentViewModel.getToastMessage().observe(this, message -> {
             if (message != null) {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -196,7 +189,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Integer courseId) {
                 if (courseId != null && courseId > 0) {
-                    studentViewModel.unenrollStudent(courseId, student.getStudentId());
+                    studentViewModel.unenrollStudent(courseId, student.getStudentId(), courseCode);
                 } else {
                     Toast.makeText(CourseDetailsActivity.this,
                             "Could not determine course", Toast.LENGTH_SHORT).show();
@@ -209,5 +202,10 @@ public class CourseDetailsActivity extends AppCompatActivity {
                         "Error removing student: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        studentViewModel.loadStudentsForCourse(courseCode); // Refresh list
     }
 }

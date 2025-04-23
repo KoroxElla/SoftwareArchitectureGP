@@ -36,14 +36,5 @@
             android:textColor="@color/gray"
             android:textSize="14sp"/>
 
-        <!--Button remove-->
-        <Button
-            android:id="@+id/btnRemoveStudent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/removeBtn"
-            android:layout_marginTop="8dp" />
-
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>

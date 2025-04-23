@@ -45,13 +45,18 @@ public class AddStudentActivity extends AppCompatActivity {
 
         // Setup observers
         studentViewModel.getToastMessage().observe(this, message -> {
-            if (message != null) {
+            //Only show toast if student was not added
+            if (message != null && !Boolean.TRUE.equals(studentViewModel.getStudentAdded().getValue())) {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                btnAdd.setEnabled(true);
             }
         });
 
         studentViewModel.getStudentAdded().observe(this, isAdded -> {
-            if (isAdded != null && isAdded) {
+            if (Boolean.TRUE.equals(isAdded)) {
+                studentViewModel.resetStudentAddedFlag();
+                studentViewModel.getToastMessage().removeObservers(this);
+                Toast.makeText(this, "Student added!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

@@ -56,5 +56,8 @@
     <string name="new_name">Enter New Name:</string>
     <string name="new_email">Enter New Email:</string>
     <string name="new_matric">Enter New Matric Number:</string>
+    <string name="student_list_heading">Students</string>
+    <string name="student_list_description">List of enrolled students</string>
+    <string name="student_courses_desc">List of courses enrolled</string>
 
 </resources>
