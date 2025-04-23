@@ -1,9 +1,7 @@
 package com.example.part2.data.repository;
 
 import android.app.Application;
-
 import androidx.lifecycle.LiveData;
-
 import com.example.part2.data.dao.AppDatabase;
 import com.example.part2.data.dao.CourseDao;
 import com.example.part2.data.dao.CourseStudentDao;
@@ -11,27 +9,37 @@ import com.example.part2.data.dao.StudentDao;
 import com.example.part2.data.entities.CourseStudentCrossRef;
 import com.example.part2.data.entities.Student;
 import com.example.part2.data.entities.StudentWithCourses;
-
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Repository for managing student-related database operations.
+ * Acts as an abstraction layer between ViewModels and data sources (DAO).
+ */
 public class StudentRepository {
 
+    // DAO interfaces for database operations
     private final StudentDao studentDao;
     private final CourseStudentDao courseStudentDao;
     private final CourseDao courseDao;
+
+    // Single-thread executor for database operations (prevents UI freezing)
     private final ExecutorService executorService;
 
     public StudentRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
-        studentDao = db.studentDao();
-        courseStudentDao = db.courseStudentDao();
-        courseDao = db.courseDao();
-        executorService = Executors.newSingleThreadExecutor();
+        this.studentDao = db.studentDao();
+        this.courseStudentDao = db.courseStudentDao();
+        this.courseDao = db.courseDao();
+        this.executorService = Executors.newSingleThreadExecutor();
     }
 
+    /**
+     * Retrieves students enrolled in a specific course asynchronously.
+     * @param courseCode The course code to filter by
+     * @param callback Callback to handle success/error responses
+     */
     public void getStudentsForCourse(String courseCode, RepositoryCallback<List<Student>> callback) {
         executorService.execute(() -> {
             try {
@@ -48,18 +56,12 @@ public class StudentRepository {
         });
     }
 
-    // ✅ Sync method (used in AddStudentActivity or background logic)
-    public Student getStudentByUsernameSync(String username) {
-        try {
-            return executorService.submit(() ->
-                    studentDao.getStudentByUsernameSync(username)
-            ).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace(); // Consider using Log.e(TAG, "error", e) in production
-            return null;
-        }
-    }
 
+    /**
+     * Gets a course ID by its code asynchronously.
+     * @param courseCode The course code to look up
+     * @param callback Callback with the course ID or error
+     */
     public void getCourseId(String courseCode, RepositoryCallback<Integer> callback) {
         executorService.execute(() -> {
             try {
@@ -71,6 +73,11 @@ public class StudentRepository {
         });
     }
 
+    /**
+     * Retrieves a student by matriculation number asynchronously.
+     * @param matricNumber The student's matric number
+     * @param callback Callback with Student object or error
+     */
     public void getStudentByMatric(String matricNumber, RepositoryCallback<Student> callback) {
         executorService.execute(() -> {
             try {
@@ -82,6 +89,11 @@ public class StudentRepository {
         });
     }
 
+    /**
+     * Inserts a new student record asynchronously.
+     * @param student The Student object to insert
+     * @param callback Callback with the generated ID or error
+     */
     public void insertStudent(Student student, RepositoryCallback<Long> callback) {
         executorService.execute(() -> {
             try {
@@ -93,6 +105,11 @@ public class StudentRepository {
         });
     }
 
+    /**
+     * Updates an existing student record asynchronously.
+     * @param student The updated Student object
+     * @param callback Callback for success/error
+     */
     public void updateStudent(Student student, RepositoryCallback<Void> callback) {
         executorService.execute(() -> {
             try {
@@ -102,24 +119,16 @@ public class StudentRepository {
                 callback.onError(e);
             }
         });
-        }
-        // ✅ Insert student and return the generated ID
-        public long insertAndGetId(Student student) {
-            try {
-                return executorService.submit(() ->
-                        studentDao.insertStudent(student)
-                ).get();
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                return -1;
-            }
-        }
-    public void deleteStudent(Student student) {
-        executorService.execute(() ->
-                studentDao.deleteStudent(student)
-        );
     }
 
+
+
+    /**
+     * Checks if a student is enrolled in a course asynchronously.
+     * @param courseId The course ID to check
+     * @param studentId The student ID to check
+     * @param callback Callback with boolean result or error
+     */
     public void isStudentEnrolled(int courseId, int studentId, RepositoryCallback<Boolean> callback) {
         executorService.execute(() -> {
             try {
@@ -131,6 +140,12 @@ public class StudentRepository {
         });
     }
 
+    /**
+     * Enrolls a student in a course asynchronously.
+     * @param courseId The course ID
+     * @param studentId The student ID
+     * @param callback Callback for success/error
+     */
     public void enrollStudent(int courseId, int studentId, RepositoryCallback<Void> callback) {
         executorService.execute(() -> {
             try {
@@ -141,33 +156,35 @@ public class StudentRepository {
             }
         });
     }
-    public void removeStudentFromCourse(String courseCode, String studentMatric) {
-        executorService.execute(() -> {
-            int courseId = courseDao.getCourseIdByCode(courseCode);
-            Student student = studentDao.getStudentByMatric(studentMatric);
-            if (courseId > 0 && student != null) {
-                courseStudentDao.removeStudentFromCourse(courseId, student.getStudentId());
-            }
-        });
-    }
+
+
+    /**
+     * Callback interface for asynchronous operations.
+     * @param <T> Type of the result data
+     */
     public interface RepositoryCallback<T> {
         void onSuccess(T result);
         void onError(Exception e);
     }
-    // Add these LiveData methods:
-    public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
-        return studentDao.getStudentWithCoursesByUserName(userName);
-    }
 
-    // LiveData version
-    public LiveData<Student> getStudentByUsernameLive(String userName) {
-        return studentDao.getStudentByUsernameLive(userName);
-    }
+    // ========== LiveData Methods (for UI observation) ========== //
 
+
+    /**
+     * Gets a student with their courses by student ID (LiveData).
+     * @param studentId The student ID
+     * @return LiveData containing StudentWithCourses
+     */
     public LiveData<StudentWithCourses> getStudentWithCourses(int studentId) {
         return studentDao.getStudentWithCoursesById(studentId);
     }
 
+    /**
+     * Unenrolls a student from a course asynchronously.
+     * @param courseId The course ID
+     * @param studentId The student ID
+     * @param callback Callback for success/error
+     */
     public void unenrollStudent(int courseId, int studentId, RepositoryCallback<Void> callback) {
         executorService.execute(() -> {
             try {
@@ -179,6 +196,11 @@ public class StudentRepository {
         });
     }
 
+    /**
+     * Gets a student by ID (LiveData).
+     * @param studentId The student ID
+     * @return LiveData containing Student
+     */
     public LiveData<Student> getStudentById(int studentId) {
         return studentDao.getStudentById(studentId);
     }

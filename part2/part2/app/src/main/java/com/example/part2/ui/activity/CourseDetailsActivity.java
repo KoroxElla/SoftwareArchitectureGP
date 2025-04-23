@@ -32,8 +32,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private RecyclerView studentsRecyclerView;
     private StudentAdapter studentAdapter;
     private StudentViewModel studentViewModel;
-    private String courseCode;
-    private TextView emptyView;
+    private String courseCode; // Current course being viewed
+    private TextView emptyView; // Shown when no students
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
 
+        // Get course data from intent
         courseCode = getIntent().getStringExtra("courseCode");
         if (courseCode == null || courseCode.isEmpty()) {
             Toast.makeText(this, "Invalid course", Toast.LENGTH_SHORT).show();
@@ -48,6 +49,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
             return;
         }
 
+        // Initialize ViewModel and RecyclerView
         studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
         studentsRecyclerView = findViewById(R.id.courserecycler);
         studentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -55,18 +57,22 @@ public class CourseDetailsActivity extends AppCompatActivity {
         studentsRecyclerView.setAdapter(studentAdapter);
 
         emptyView = findViewById(R.id.emptyView);
+
+        // Setup UI components
         setupActionBar();
         setupCustomTitle();
         setupLecturer();
         observeStudents();
 
+        // Configure FAB
         FloatingActionButton addStudentButton = findViewById(R.id.addStudentButton);
         addStudentButton.setOnClickListener(v -> {
-            Intent intent = new Intent(CourseDetailsActivity.this, AddStudentActivity.class);
+            Intent intent = new Intent(this, AddStudentActivity.class);
             intent.putExtra("courseCode", courseCode);
             startActivity(intent);
         });
 
+        // Handle edge-to-edge insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -74,6 +80,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configures custom action bar
+     */
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -83,12 +92,15 @@ public class CourseDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets up custom title view with course code and name
+     */
     private void setupCustomTitle() {
         String courseName = getIntent().getStringExtra("courseName");
-        View customTitleView = getLayoutInflater().inflate(R.layout.custom_toolbar_title,  studentsRecyclerView, false);
+        View customTitleView = getLayoutInflater().inflate(R.layout.custom_toolbar_title, null);
+
         TextView topTitle = customTitleView.findViewById(R.id.top_title);
         TextView mainTitle = customTitleView.findViewById(R.id.main_title);
-
         topTitle.setText(courseCode);
         mainTitle.setText(courseName != null ? courseName : "COURSE NAME");
 
@@ -97,6 +109,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays lecturer name or placeholder text
+     */
     private void setupLecturer() {
         String lecturer = getIntent().getStringExtra("lecturer");
         TextView lecturerView = findViewById(R.id.Lecturername);
@@ -109,27 +124,30 @@ public class CourseDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Observes student list changes and updates UI
+     */
     private void observeStudents() {
         TextView studentsHeading = findViewById(R.id.studentsHeading);
         studentViewModel.getStudentsForCourse(courseCode).observe(this, students -> {
             if (students != null && !students.isEmpty()) {
+                // Show student list
                 studentsHeading.setVisibility(View.VISIBLE);
                 studentAdapter.setStudentList(students);
                 studentsRecyclerView.setVisibility(View.VISIBLE);
                 emptyView.setVisibility(View.GONE);
             } else {
+                // Show empty state
                 studentsHeading.setVisibility(View.GONE);
                 studentsRecyclerView.setVisibility(View.GONE);
                 emptyView.setVisibility(View.VISIBLE);
             }
         });
-        studentsRecyclerView.setAdapter(studentAdapter);
 
-        // Click listener
-        studentAdapter.setOnItemClickListener(student -> {
-            showStudentOptionsDialog(student);
-        });
-        // Toast observer
+        // Set click listener for student items
+        studentAdapter.setOnItemClickListener(this::showStudentOptionsDialog);
+
+        // Observe toast messages
         studentViewModel.getToastMessage().observe(this, message -> {
             if (message != null) {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -137,55 +155,42 @@ public class CourseDetailsActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Shows options dialog for a student (View/Edit/Remove)
+     */
     private void showStudentOptionsDialog(Student student) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Student Options")
+        new AlertDialog.Builder(this)
+                .setTitle("Student Options")
                 .setItems(new String[]{"View Details", "Edit", "Remove"}, (dialog, which) -> {
                     switch (which) {
-                        case 0: // View Details
-                            viewStudentDetails(student);
-                            break;
-                        case 1: // Edit
-                            editStudent(student);
-                            break;
-                        case 2: // Remove
-                            removeStudentFromCourse(student);
-                            break;
+                        case 0: viewStudentDetails(student); break;
+                        case 1: editStudent(student); break;
+                        case 2: removeStudentFromCourse(student); break;
                     }
-                });
-        builder.create().show();
+                }).show();
     }
 
     private void viewStudentDetails(Student student) {
         Intent intent = new Intent(this, StudentDetailsActivity.class);
         intent.putExtra("studentId", student.getStudentId());
-        intent.putExtra("courseCode", courseCode); // pass along the current course data
+        intent.putExtra("courseCode", courseCode);
         intent.putExtra("courseName", getIntent().getStringExtra("courseName"));
         intent.putExtra("lecturer", getIntent().getStringExtra("lecturer"));
         startActivity(intent);
     }
-
 
     private void editStudent(Student student) {
         Intent intent = new Intent(this, EditStudentActivity.class);
         intent.putExtra("studentId", student.getStudentId());
-        intent.putExtra("courseCode", courseCode); // pass along the current course data
-        intent.putExtra("courseName", getIntent().getStringExtra("courseName"));
-        intent.putExtra("lecturer", getIntent().getStringExtra("lecturer"));
+        intent.putExtra("courseCode", courseCode);
         startActivity(intent);
     }
 
+    /**
+     * Removes student from current course
+     */
     private void removeStudentFromCourse(Student student) {
-        studentViewModel.getCourseId(courseCode, new StudentRepository.RepositoryCallback<Integer>() {
+        studentViewModel.getCourseId(courseCode, new StudentRepository.RepositoryCallback<>() {
             @Override
             public void onSuccess(Integer courseId) {
                 if (courseId != null && courseId > 0) {
@@ -203,9 +208,19 @@ public class CourseDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        studentViewModel.loadStudentsForCourse(courseCode); // Refresh list
+        studentViewModel.loadStudentsForCourse(courseCode); // Refresh data
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

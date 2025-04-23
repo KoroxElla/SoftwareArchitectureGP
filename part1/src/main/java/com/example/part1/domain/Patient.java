@@ -32,6 +32,10 @@ public class Patient {
     @JsonManagedReference("patient-appointments")
     private List<Appointments> appointments;
 
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<MedicalRecord> medicalRecords;
+
+
     // ========== Getters & Setters ========== //
 
     public Long getId() {
@@ -80,5 +84,13 @@ public class Patient {
 
     public void setAppointments(List<Appointments> appointments) {
         this.appointments = appointments;
+    }
+
+    public List<MedicalRecord> getMedicalRecords() {
+        return medicalRecords;
+    }
+
+    public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
+        this.medicalRecords = medicalRecords;
     }
 }
