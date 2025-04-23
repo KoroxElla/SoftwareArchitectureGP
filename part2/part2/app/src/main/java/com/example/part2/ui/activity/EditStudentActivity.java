@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.part2.R;
 import com.example.part2.data.entities.Student;
-import com.example.part2.viewmodel.StudentViewModel;
+import com.example.part2.viewmodel.;
 
 public class EditStudentActivity extends AppCompatActivity {
 

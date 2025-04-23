@@ -32,7 +32,7 @@ public class CourseViewModel extends AndroidViewModel {
         return allCourses;
     }
 
-    // Validate course code before adding
+    // Method to validate the course code
     public void validateCourseCode(String courseCode) {
         courseRepository.isCourseCodeUnique(courseCode).observeForever(isUnique -> {
             if (!isUnique) {
@@ -45,10 +45,15 @@ public class CourseViewModel extends AndroidViewModel {
         });
     }
 
-    // Add new course
+    // Method to add the course to the repository
     public void addCourse(Course course) {
         courseRepository.insertCourse(course);
     }
+
+    public void delete(Course course) {
+        courseRepository.deleteCourse(course);
+    }
+}
 
     // Task 7: Get all students enrolled in a course (by courseId)
     public LiveData<List<Student>> getStudentsInCourse(int courseId) {

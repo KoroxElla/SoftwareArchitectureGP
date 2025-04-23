@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
+
 
 import com.example.part2.data.entities.Student;
 import com.example.part2.data.entities.StudentWithCourses;
@@ -28,6 +30,21 @@ public interface StudentDao {
     @Query("SELECT * FROM Student")
     List<StudentWithCourses> getStudentsWithCourses();
 
+
+    @Query("SELECT * FROM Student WHERE matricNumber = :matricNumber LIMIT 1")
+    Student getStudentByMatric(String matricNumber);
+
+    @Delete
+    void deleteStudent(Student student);
+
+    @Update
+    void updateStudent(Student student);
+
+    @Insert
+    long insertStudentAndGetId(Student student); // Add this for getting the ID
+
+    @Query("SELECT * FROM Student WHERE studentId = :studentId")
+    Student getStudentById(int studentId);
     // ✅ Task 6 - Get one student and their enrolled courses (LiveData)
     @Transaction
     @Query("SELECT * FROM Student WHERE userName = :userName")
@@ -41,6 +58,4 @@ public interface StudentDao {
     @Query("SELECT * FROM Student WHERE userName = :userName LIMIT 1")
     Student getStudentByUsernameSync(String userName);
 
-    @Delete
-    void deleteStudent(Student student);
 }

@@ -29,7 +29,7 @@ public class CourseRepository {
         executorService = Executors.newSingleThreadExecutor();
     }
 
-    // ✅ Check if course code is unique (LiveData)
+    // For LiveData observation (UI layer)
     public LiveData<Boolean> isCourseCodeUnique(String courseCode) {
         MediatorLiveData<Boolean> result = new MediatorLiveData<>();
         LiveData<Course> source = courseDao.getCourseByCode(courseCode);
@@ -42,11 +42,11 @@ public class CourseRepository {
         return result;
     }
 
-    // ✅ Check course code uniqueness (blocking thread - use carefully)
+    // For synchronous checks (if needed)
     public boolean isCourseCodeUniqueSync(String courseCode) throws ExecutionException, InterruptedException {
         return executorService.submit(() ->
                 courseDao.getCourseByCodeSync(courseCode) == null
-        ).get();
+        ).get(); // Note: This blocks, use carefully
     }
 
     // ✅ Insert new course
@@ -54,10 +54,15 @@ public class CourseRepository {
         executorService.execute(() -> courseDao.insertCourse(course));
     }
 
+    public void deleteCourse(Course course){
+        executorService.execute(() ->courseDao.deleteCourse(course));
+    }
+
     // ✅ Get all courses (LiveData)
     public LiveData<List<Course>> getAllCoursesLive() {
         return courseDao.getAllCoursesLive();
     }
+}
 
     // ✅ Task 7 - Get students enrolled in a course (by courseId)
     public LiveData<List<Student>> getStudentsInCourse(int courseId) {

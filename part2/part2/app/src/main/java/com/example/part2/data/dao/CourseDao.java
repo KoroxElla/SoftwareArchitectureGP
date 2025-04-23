@@ -38,7 +38,13 @@ public interface CourseDao {
     @Query("SELECT * FROM Course WHERE courseCode = :code LIMIT 1")
     LiveData<Course> getCourseByCode(String code);
 
-    // Synchronous version for internal use (like in ViewModel/Repo)
+    @Query("SELECT courseId FROM Course WHERE courseCode = :courseCode LIMIT 1")
+    int getCourseIdByCode(String courseCode);
+
+    @Query("SELECT courseCode FROM Course WHERE courseId = :courseId LIMIT 1")
+    String getCourseCodeById(int courseId);
+
+    // Add this if you need synchronous version too
     @Query("SELECT * FROM Course WHERE courseCode = :code LIMIT 1")
     Course getCourseByCodeSync(String code);
 

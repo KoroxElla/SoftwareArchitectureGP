@@ -1,16 +1,12 @@
 <resources>
     <string name="app_name">part2</string>
     <string name="todo">button</string>
-
-    <!-- Course Fields -->
     <string name="coursec">Course Code:</string>
     <string name="coursen">Course Name:</string>
     <string name="lecturern">Lecturer Name:</string>
+    <string name="name">Name</string>
     <string name="Createcourse">Create New Course</string>
     <string name="submit">Create</string>
-    <string name="title_create_course">Create a New Course</string>
-
-    <!-- Course Hints -->
     <string name="hint1">e.g. CO2124</string>
     <string name="hint2">Software Architecture II</string>
     <string name="hint3">Dr. Kehinde</string>
@@ -18,9 +14,6 @@
     <!-- Validation -->
     <string name="invalid_course_code">Invalid course code (e.g., AB1234)</string>
     <string name="all_fields_required">All fields are required</string>
-
-    <!-- Student -->
-    <string name="add_student">Add Student</string>
 
     <!-- Student Hints -->
     <string name="hint_name">Name</string>
@@ -35,5 +28,25 @@
 
     <!-- Missing Strings from Layout Errors -->
     <string name="course_list">List of courses</string>
-    <string name="add_course">Add a new course</string>
+    <string name="title_create_course">Create a New Course</string>
+    <string name="Studentname">Student Name</string>
+    <string name="Studentemail">Student Email</string>
+    <string name="Studentusername">Student Username</string>
+    <string name="addstudent">Add Student</string>
+    <string name="nostudents">No students have been enrolled</string>
+    <string name="add_course">Create a new course</string>
+    <string name="add_student">Add Student</string>
+    <string name="studentName">Student Name</string>
+    <string name="studentEmail">Email</string>
+    <string name="studentUsername">Matric Number</string>
+    <string name="hint4">Enter Student Name</string>
+    <string name="hint5">Enter Email</string>
+    <string name="hint6">Enter Matric Number</string>
+    <string name="courseCard">Course display</string>
+    <string name="matric">Matric Number</string>
+    <string name="matric_hint">Enter matric number</string>
+    <string name="course_code_label">Course Code: %s</string>
+    <string name="course_name_label">Course Name: %s</string>
+    <string name="lecturer_label">Lecturer: %s</string>
+
 </resources>

@@ -11,12 +11,22 @@ import com.example.part2.data.entities.Course;
 import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
-    private List<Course> courseList;
+    private List<Course> courses;
+    private OnCourseClickListener listener;
 
-    //Set course list
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
-        notifyDataSetChanged(); // Refresh list
+    public interface OnCourseClickListener {
+        void onCourseClick(Course course);
+        void onCourseLongClick(Course course); // <-- Add this
+    }
+
+    public CourseAdapter(List<Course> courses, OnCourseClickListener listener) {
+        this.courses = courses;
+        this.listener = listener;
+    }
+
+    public void setCourseList(List<Course> courses) {
+        this.courses = courses;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -29,24 +39,51 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-        Course course = courseList.get(position);
-        holder.courseCode.setText(course.getCourseCode());
-        holder.courseName.setText(course.getCourseName());
-        holder.lecturerName.setText(course.getLecturerName());
+        Course course = courses.get(position);
+        holder.bind(course); // This sets the text values
+
+        // This handles the regular clicks
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null && position != RecyclerView.NO_POSITION) {
+                listener.onCourseClick(course);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (listener != null && position != RecyclerView.NO_POSITION) {
+                listener.onCourseLongClick(course);
+            }
+            return true;
+        });
+    }
+
+    public Course getCourseAt(int position) {
+        if (position >= 0 && position < courses.size()) {
+            return courses.get(position);
+        }
+        return null;
     }
 
     @Override
     public int getItemCount() {
-        return courseList != null ? courseList.size() : 0;
+        return courses != null ? courses.size() : 0;
     }
 
     public static class CourseViewHolder extends RecyclerView.ViewHolder {
         TextView courseCode, courseName, lecturerName;
+
         public CourseViewHolder(@NonNull View itemView) {
             super(itemView);
             courseCode = itemView.findViewById(R.id.tvCourseCode);
             courseName = itemView.findViewById(R.id.tvCourseName);
             lecturerName = itemView.findViewById(R.id.tvLecturerName);
+        }
+
+        public void bind(Course course) {
+            String template = "%s: %s";
+            courseCode.setText(String.format(template, "Course Code", course.getCourseCode()));
+            courseName.setText(String.format(template, "Course Name",course.getCourseName()));
+            lecturerName.setText(String.format(template, "Lecturer Name",course.getLecturerName()));
         }
     }
 }
