@@ -10,29 +10,38 @@ import com.example.part2.data.entities.Course;
 import com.example.part2.data.entities.Student;
 import com.example.part2.data.entities.CourseStudentCrossRef;
 
+/**
+ * Room Database class that serves as the main access point to the persisted data.
+ * Uses singleton pattern to ensure only one database instance exists.
+ */
 @Database(
         entities = {
                 Course.class,
                 Student.class,
-                CourseStudentCrossRef.class  //  Using the correct cross-ref
+                CourseStudentCrossRef.class  // Junction table for M:N relationship
         },
-        version = 1,
-        exportSchema = false
+        version = 1,  // Database version (increment when schema changes)
+        exportSchema = false  // Disable schema export (set to true for production migrations)
 )
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase instance;
 
+    /**
+     * Singleton pattern to get the database instance.
+     * @param context Application context
+     * @return The single AppDatabase instance
+     */
     public static AppDatabase getInstance(Context context) {
         if (instance == null) {
-            synchronized (AppDatabase.class) {
+            synchronized (AppDatabase.class) {  // Thread-safe initialization
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                                     context.getApplicationContext(),
                                     AppDatabase.class,
-                                    "app_database"
+                                    "app_database"  // Database file name
                             )
-                            .fallbackToDestructiveMigration()
+                            .fallbackToDestructiveMigration()  // Wipes DB on version mismatch
                             .build();
                 }
             }
@@ -40,8 +49,20 @@ public abstract class AppDatabase extends RoomDatabase {
         return instance;
     }
 
-    //  Abstract DAO interfaces
+    // ========== DAO ACCESS METHODS ========== //
+
+    /**
+     * @return CourseDao instance for course-related operations
+     */
     public abstract CourseDao courseDao();
+
+    /**
+     * @return StudentDao instance for student-related operations
+     */
     public abstract StudentDao studentDao();
+
+    /**
+     * @return CourseStudentDao instance for enrollment operations
+     */
     public abstract CourseStudentDao courseStudentDao();
 }
