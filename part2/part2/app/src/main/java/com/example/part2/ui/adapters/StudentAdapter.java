@@ -1,5 +1,6 @@
 package com.example.part2.ui.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.part2.R;
 import com.example.part2.data.entities.Student;
+
 import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
     private List<Student> students;
     private OnStudentRemoveListener listener;
+    private Context context;
 
-    public StudentAdapter(List<Student> students) {
+    public StudentAdapter(List<Student> students, Context context) {
         this.students = students;
+        this.context = context;
     }
 
     public void updateStudents(List<Student> newStudents) {
@@ -29,6 +33,20 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     public interface OnStudentRemoveListener {
         void onRemoveClicked(String studentMatric);
     }
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Student student);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setStudentList(List<Student> students) {
+        this.students = students;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -38,6 +56,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         return new StudentViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
         Student student = students.get(position);
@@ -45,6 +65,11 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         holder.removeBtn.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onRemoveClicked(student.getMatricNumber());
+            }
+        });
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(student);
             }
         });
     }

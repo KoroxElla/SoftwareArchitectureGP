@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.part2.data.entities.Student;
+import com.example.part2.data.entities.StudentWithCourses;
 import com.example.part2.data.repository.StudentRepository;
 
 import java.util.Collections;
@@ -178,4 +179,56 @@ public class StudentViewModel extends AndroidViewModel {
                     }
                 });
     }
+
+    // For Task 6 - Show student with enrolled courses
+    public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
+        return studentRepository.getStudentWithCourses(userName);
+    }
+
+    // For EditStudentActivity - get basic Student by username
+    public LiveData<Student> getStudentByUsername(String userName) {
+        return studentRepository.getStudentByUsernameLive(userName);
+    }
+
+    public LiveData<StudentWithCourses> getStudentWithCourses(int studentId) {
+        return studentRepository.getStudentWithCourses(studentId);
+    }
+
+
+    public LiveData<Student> getStudentById(int studentId) {
+        return studentRepository.getStudentById(studentId);
+    }
+
+    public void updateStudent(Student student) {
+        studentRepository.updateStudent(student, new StudentRepository.RepositoryCallback<>() {
+            @Override
+            public void onSuccess(Void result) {
+                toastMessage.postValue("Student updated successfully");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                toastMessage.postValue("Error updating student");
+            }
+        });
+    }
+
+    public void unenrollStudent(int courseId, int studentId) {
+        studentRepository.unenrollStudent(courseId, studentId, new StudentRepository.RepositoryCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                toastMessage.postValue("Student removed from course");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                toastMessage.postValue("Error removing student");
+            }
+        });
+    }
+
+    public void getCourseId(String courseCode, StudentRepository.RepositoryCallback<Integer> callback) {
+        studentRepository.getCourseId(courseCode, callback);
+    }
+
 }

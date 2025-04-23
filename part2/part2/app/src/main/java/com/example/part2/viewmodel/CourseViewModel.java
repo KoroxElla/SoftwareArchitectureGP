@@ -8,7 +8,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.part2.data.entities.Course;
+import com.example.part2.data.entities.Student;
 import com.example.part2.data.repository.CourseRepository;
+
 import java.util.List;
 
 public class CourseViewModel extends AndroidViewModel {
@@ -25,6 +27,7 @@ public class CourseViewModel extends AndroidViewModel {
         allCourses = courseRepository.getAllCoursesLive();
     }
 
+    // Get all courses
     public LiveData<List<Course>> getAllCourses() {
         return allCourses;
     }
@@ -49,5 +52,16 @@ public class CourseViewModel extends AndroidViewModel {
 
     public void delete(Course course) {
         courseRepository.deleteCourse(course);
+    }
+
+
+    // Task 7: Get all students enrolled in a course (by courseId)
+    public LiveData<List<Student>> getStudentsInCourse(int courseId) {
+        return courseRepository.getStudentsInCourse(courseId);
+    }
+
+    //  Task 7: Unenroll student by courseId and studentId
+    public void unenrollStudentFromCourse(int courseId, int studentId) {
+        courseRepository.unenrollStudentFromCourse(courseId, studentId);
     }
 }

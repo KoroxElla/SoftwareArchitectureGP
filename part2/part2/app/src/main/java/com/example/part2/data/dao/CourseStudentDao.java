@@ -12,15 +12,19 @@ import java.util.List;
 
 @Dao
 public interface CourseStudentDao {
+
+    // Enroll a student in a course
     @Insert
     void enrollStudent(CourseStudentCrossRef crossRef);
 
     @Query("SELECT COUNT(*) FROM COURSESTUDENTCROSSREF WHERE courseId = :courseId AND studentId = :studentId")
     int isStudentEnrolled(int courseId, int studentId);
 
-    @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId")
-    void removeStudentsFromCourse(int courseId);
+    // Remove all students from a specific course
+    @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId AND studentId = :studentId")
+    void removeStudentFromCourse(int courseId, int studentId);
 
+    // Remove a student from all courses
     @Query("DELETE FROM CourseStudentCrossRef WHERE studentId = :studentId")
     void removeStudentFromAllCourses(int studentId);
 
@@ -33,4 +37,8 @@ public interface CourseStudentDao {
     @Transaction
     @Query("SELECT * FROM Student WHERE studentId IN (SELECT studentId FROM CourseStudentCrossRef WHERE courseId = :courseId)")
     List<Student> getStudentsForCourse(int courseId);
+
+    @Query("DELETE FROM CourseStudentCrossRef WHERE courseId = :courseId AND studentId = :studentId")
+    void unenrollStudent(int courseId, int studentId);
 }
+
