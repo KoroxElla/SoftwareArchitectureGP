@@ -2,7 +2,7 @@ package com.example.part1.service;
 
 import com.example.part1.domain.Appointments;
 import com.example.part1.domain.Doctor;
-import com.example.part1.domain.MedicalRecord;
+import com.example.part1.domain.Record;
 import com.example.part1.domain.Patient;
 import com.example.part1.repo.AppointmentRepo;
 import com.example.part1.repo.DoctorRepo;
@@ -33,7 +33,7 @@ public class DoctorService {
 
         for (Appointments appointment : doctor.getAppointments()) {
             Patient patient = appointment.getPatient();
-            MedicalRecord medicalRecord = appointment.getMedicalRecord();
+            Record medicalRecord = appointment.getMedicalRecord();
 
             if (medicalRecord != null && patient != null) {
                 medicalRecord.setAppointment(null);
@@ -47,5 +47,4 @@ public class DoctorService {
         doctorRepo.deleteById(doctorId);
         return true;
     }
-
 }
