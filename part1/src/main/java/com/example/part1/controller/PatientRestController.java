@@ -7,6 +7,7 @@ import com.example.part1.repo.PatientRepo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.List;
@@ -29,7 +30,7 @@ public class PatientRestController {
 
     // === Endpoint #2: Create a new patient (POST /patients) ===
     @PostMapping
-    public ResponseEntity<Object> createPatient(@RequestBody Patient patient) {
+    public ResponseEntity<Object> createPatient(@Valid @RequestBody Patient patient) {
         Patient saved = patientRepo.save(patient); // Saves the new patient to the database
         return ResponseEntity.status(HttpStatus.CREATED).body(saved); // Returns 201 (Created) with the saved patient
     }
