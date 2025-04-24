@@ -58,7 +58,7 @@ public class Appointments {
      */
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference("appointment-medical-record")
-    private MedicalRecord medicalRecord;
+    private Record medicalRecord;
 
     // ========== Getters & Setters ========== //
 
@@ -110,11 +110,11 @@ public class Appointments {
         this.doctor = doctor;
     }
 
-    public MedicalRecord getMedicalRecord() {
+    public Record getMedicalRecord() {
         return medicalRecord;
     }
 
-    public void setRecord(MedicalRecord medicalRecord) {
+    public void setRecord(Record medicalRecord) {
         this.medicalRecord = medicalRecord;
     }
 }
