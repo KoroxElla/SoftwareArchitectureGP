@@ -40,7 +40,7 @@ public class Patient {
     private List<Appointments> appointments;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<MedicalRecord> medicalRecords;
+    private List<Record> medicalRecords;
 
 
     // ========== Getters & Setters ========== //
@@ -93,11 +93,11 @@ public class Patient {
         this.appointments = appointments;
     }
 
-    public List<MedicalRecord> getMedicalRecords() {
+    public List<Record> getMedicalRecords() {
         return medicalRecords;
     }
 
-    public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
+    public void setMedicalRecords(List<Record> medicalRecords) {
         this.medicalRecords = medicalRecords;
     }
 }
