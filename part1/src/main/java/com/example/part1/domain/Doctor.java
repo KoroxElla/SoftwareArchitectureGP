@@ -1,7 +1,15 @@
 package com.example.part1.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.List;
 
 /**
@@ -15,6 +23,7 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increments the ID
     private Long id; // Unique identifier for the doctor
 
+    @NotBlank(message = "Name is required")
     private String name; // Full name of the doctor
     private String specialisation; // Medical specialisation (e.g., Cardiologist)
     private String email; // Email address of the doctor
