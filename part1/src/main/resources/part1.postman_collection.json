@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/main/resources/part1.postman_collection.json
 {
 	"info": {
 		"_postman_id": "2ba5653f-1634-4e94-8697-5e810891a7fc",
@@ -950,8 +949,3 @@
 		}
 	]
 }
-=======
-{
-  "info": "Placeholder file, replace this content with your Postman Collection"
-}
->>>>>>> origin/main:part1/src/main/resources/part1.postman_collection.json
