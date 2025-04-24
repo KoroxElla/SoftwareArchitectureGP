@@ -1,7 +1,15 @@
 package com.example.part1.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+
 import java.sql.Timestamp;
 
 /**
@@ -49,6 +57,7 @@ public class Appointments {
      * - `orphanRemoval = true` removes the medical record if unlinked from this appointment.
      */
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference("appointment-medical-record")
     private MedicalRecord medicalRecord;
 
     // ========== Getters & Setters ========== //
