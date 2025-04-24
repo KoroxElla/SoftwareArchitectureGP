@@ -33,3 +33,4 @@ build/
 **/build/
 *.lock
 *.log
+.DS_Store
