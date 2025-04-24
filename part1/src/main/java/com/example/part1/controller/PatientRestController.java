@@ -2,7 +2,7 @@ package com.example.part1.controller;
 
 import com.example.part1.domain.Patient;
 import com.example.part1.domain.Appointments;
-import com.example.part1.domain.MedicalRecord;
+import com.example.part1.domain.Record;
 import com.example.part1.repo.PatientRepo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -99,7 +99,7 @@ public class PatientRestController {
 
         if (optional.isPresent()) {
             // Collects all non-null medical records from the patient's appointments
-            List<MedicalRecord> medicalRecords = optional.get().getAppointments().stream()
+            List<Record> medicalRecords = optional.get().getAppointments().stream()
                     .map(Appointments::getMedicalRecord) // Extracts medical records
                     .filter(java.util.Objects::nonNull) // Filters out null records (if any)
                     .collect(Collectors.toList());
