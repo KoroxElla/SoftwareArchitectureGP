@@ -3,6 +3,7 @@ package com.example.part1.controller;
 import com.example.part1.domain.Doctor;
 import com.example.part1.repo.DoctorRepo;
 import com.example.part1.service.DoctorService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class DoctorRestController {
 
     // === Endpoint #9: Create a new doctor (POST /doctors) ===
     @PostMapping
-    public ResponseEntity<?> createDoctor(@RequestBody Doctor doctor) {
+    public ResponseEntity<?> createDoctor(@Valid @RequestBody Doctor doctor) {
         // Validations are handled by JPA/Hibernate (e.g., @NotBlank in entity)
         Doctor saved = doctorRepo.save(doctor); // Persists the new doctor
         return ResponseEntity.status(HttpStatus.CREATED).body(saved); // HTTP 201 (Created)
