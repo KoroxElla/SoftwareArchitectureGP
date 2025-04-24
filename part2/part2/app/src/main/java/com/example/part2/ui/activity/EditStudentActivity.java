@@ -43,6 +43,7 @@ public class EditStudentActivity extends AppCompatActivity {
 
     }
 
+    //Load existing student information into the edit form
     private void loadStudentData() {
         studentViewModel.getStudentById(studentId).observe(this, student -> {
             if (student != null) {
@@ -53,6 +54,7 @@ public class EditStudentActivity extends AppCompatActivity {
         });
     }
 
+    //Save button to update student
     private void setupSaveButton() {
         binding.btnSaveChanges.setOnClickListener(v -> {
             String name = binding.editStudentName.getText().toString();
@@ -64,6 +66,7 @@ public class EditStudentActivity extends AppCompatActivity {
                 return;
             }
 
+            //Create updated student preserving ID and username
             Student updatedStudent = new Student();
             updatedStudent.setStudentId(studentId);
             updatedStudent.setName(name);
@@ -74,7 +77,7 @@ public class EditStudentActivity extends AppCompatActivity {
                 if (originalStudent != null) {
                     updatedStudent.setUserName(originalStudent.getUserName());
                     studentViewModel.updateStudent(updatedStudent);
-                    finish();
+                    finish(); //return to CourseDetailsActivity
                 }
             });
         });

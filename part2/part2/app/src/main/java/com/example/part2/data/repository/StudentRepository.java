@@ -102,18 +102,18 @@ public class StudentRepository {
                 callback.onError(e);
             }
         });
+    }
+    // Insert student and return the generated ID
+    public long insertAndGetId(Student student) {
+        try {
+            return executorService.submit(() ->
+                    studentDao.insertStudent(student)
+            ).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return -1;
         }
-        // ✅ Insert student and return the generated ID
-        public long insertAndGetId(Student student) {
-            try {
-                return executorService.submit(() ->
-                        studentDao.insertStudent(student)
-                ).get();
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                return -1;
-            }
-        }
+    }
     public void deleteStudent(Student student) {
         executorService.execute(() ->
                 studentDao.deleteStudent(student)

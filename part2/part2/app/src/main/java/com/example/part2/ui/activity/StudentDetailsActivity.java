@@ -59,12 +59,13 @@ public class StudentDetailsActivity extends AppCompatActivity {
                 binding.studentEmail.setText(student.getEmail());
                 binding.studentMatric.setText(student.getMatricNumber());
 
-                // Setup courses RecyclerView
+                // Setup courses RecyclerView for enrolled courses
                 if (studentWithCourses.courses != null && !studentWithCourses.courses.isEmpty()) {
                     CourseInStudentAdapter adapter = new CourseInStudentAdapter(studentWithCourses.courses);
                     binding.coursesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                     binding.coursesRecyclerView.setAdapter(adapter);
                 } else {
+                    //If student is not enrolled in any course
                     TextView noCourses = new TextView(this);
                     noCourses.setText("No enrolled courses");
                     noCourses.setTextSize(16);

@@ -75,7 +75,7 @@
                 android:layout_width="284dp"
                 android:layout_height="wrap_content"
                 android:autofillHints="matric"
-                android:enabled="false"
+                android:enabled="true"
                 android:hint="@string/hint_matric"
                 android:background="@drawable/edittext_background"
                 android:importantForAccessibility="yes"
