@@ -1,6 +1,13 @@
 package com.example.part1.domain;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.sql.Timestamp;
 
 /**
@@ -29,6 +36,7 @@ public class MedicalRecord {
      */
     @OneToOne
     @JoinColumn(name = "appointment_id", unique = true)
+    @JsonBackReference("appointment-medical-record")
     private Appointments appointment;
 
     @ManyToOne
