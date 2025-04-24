@@ -25,42 +25,40 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements CourseAdapter.OnCourseClickListener
- {
-
-    private CourseViewModel courseViewModel;
-    private CourseAdapter adapter;
-    private RecyclerView recyclerView;
+public class MainActivity extends AppCompatActivity implements CourseAdapter.OnCourseClickListener {
+    private CourseViewModel courseViewModel; // ViewModel for course data
+    private CourseAdapter adapter; // Adapter for RecyclerView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this); // Enable edge-to-edge display
         setContentView(R.layout.activity_main);
         setTitle("Home Page");
 
-        // RecyclerView setup
-        recyclerView = findViewById(R.id.recyclerView);
+        // Initialize RecyclerView
+        // RecyclerView for course list
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize adapter with click listener
         adapter = new CourseAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
 
-
         // Initialize ViewModel
         courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
 
-        // Observe courses and update adapter
+        // Observe course list changes
         courseViewModel.getAllCourses().observe(this, courses -> {
             if (courses != null) {
                 Log.d("MainActivity", "Total courses: " + courses.size());
-                adapter.setCourseList(courses);
+                adapter.setCourseList(courses); // Update adapter data
             } else {
                 Log.d("MainActivity", "No courses found");
             }
         });
 
+        // Handle edge-to-edge insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -68,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements CourseAdapter.OnC
         });
     }
 
-
+    /**
+     * Provides haptic feedback when long-pressing a course
+     */
     private void performHapticFeedback() {
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         if (vibrator != null && vibrator.hasVibrator()) {
@@ -76,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements CourseAdapter.OnC
         }
     }
 
+    /**
+     * Shows confirmation dialog before deleting a course
+     */
     private void showDeleteConfirmation(Course course) {
         new AlertDialog.Builder(this)
                 .setTitle("Delete " + course.getCourseName() + "?")
@@ -85,30 +88,24 @@ public class MainActivity extends AppCompatActivity implements CourseAdapter.OnC
                 .show();
     }
 
+    /**
+     * Deletes a course with undo Snackbar functionality
+     */
     private void deleteCourseWithUndo(Course course) {
-        // Make a copy of the course for potential undo
         Course deletedCourse = new Course(course.getCourseCode(), course.getCourseName(), course.getLecturerName());
-
-        // Delete the original course
         courseViewModel.delete(course);
 
-        Snackbar snackbar = Snackbar.make(
+        Snackbar.make(
                 findViewById(R.id.main),
                 course.getCourseName() + " deleted",
                 Snackbar.LENGTH_LONG
-        );
-
-        snackbar.setAction("UNDO", v -> {
-            // Use your actual method name (addCourse instead of insert)
-            courseViewModel.addCourse(deletedCourse);
-        });
-
-        snackbar.show();
+        ).setAction("UNDO", v -> courseViewModel.addCourse(deletedCourse)).show();
     }
 
-
+    // === Click Listeners ===
     @Override
     public void onCourseClick(Course course) {
+        // Navigate to CourseDetailsActivity
         Intent intent = new Intent(this, CourseDetailsActivity.class);
         intent.putExtra("courseCode", course.getCourseCode());
         intent.putExtra("courseName", course.getCourseName());
@@ -117,20 +114,17 @@ public class MainActivity extends AppCompatActivity implements CourseAdapter.OnC
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-     @Override
-     public void onCourseLongClick(Course course) {
-         performHapticFeedback(); // Optional: vibration feedback
-         showDeleteConfirmation(course); // Show the alert dialog to delete
-     }
-
-     public void createCourse(View v) {
-        Intent i = new Intent(this, CreateCourseActivity.class);
-        startActivity(i);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    @Override
+    public void onCourseLongClick(Course course) {
+        performHapticFeedback();
+        showDeleteConfirmation(course);
     }
 
-     @Override
-     public void onPointerCaptureChanged(boolean hasCapture) {
-         super.onPointerCaptureChanged(hasCapture);
-     }
- }
+    /**
+     * Handles FAB click to create new course
+     */
+    public void createCourse(View v) {
+        startActivity(new Intent(this, CreateCourseActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+}

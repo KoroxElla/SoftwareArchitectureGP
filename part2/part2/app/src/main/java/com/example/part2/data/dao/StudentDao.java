@@ -2,7 +2,6 @@ package com.example.part2.data.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -12,52 +11,61 @@ import androidx.room.Update;
 import com.example.part2.data.entities.Student;
 import com.example.part2.data.entities.StudentWithCourses;
 
-import java.util.List;
-
+/**
+ * Data Access Object (DAO) for Student-related database operations.
+ * Defines SQL queries that Room will implement automatically.
+ */
 @Dao
 public interface StudentDao {
 
-    // Insert operations
+    // ========== INSERT OPERATIONS ========== //
+
+    /**
+     * Inserts a new student into the database.
+     * @param student The Student object to insert
+     * @return The auto-generated studentId (primary key)
+     */
     @Insert
-    long insertStudent(Student student);  // Returns the new studentId
+    long insertStudent(Student student);
 
-    // Delete operation
-    @Delete
-    void deleteStudent(Student student);
+    // ========== UPDATE OPERATIONS ========== //
 
-    // Update operation
+    /**
+     * Updates an existing student record.
+     * @param student The Student object with updated values
+     */
     @Update
     void updateStudent(Student student);
 
-    // Single student queries (LiveData)
+    // ========== QUERY OPERATIONS (LiveData) ========== //
+
+    /**
+     * Gets a student by ID with LiveData observation.
+     * @param studentId The student's unique ID
+     * @return LiveData<Student> that can be observed for changes
+     */
     @Query("SELECT * FROM Student WHERE studentId = :studentId")
     LiveData<Student> getStudentById(int studentId);
 
-    @Query("SELECT * FROM Student WHERE userName = :userName LIMIT 1")
-    LiveData<Student> getStudentByUsernameLive(String userName);
+    // ========== QUERY OPERATIONS (Synchronous) ========== //
 
-    // Single student queries (sync)
+    /**
+     * Gets a student by matriculation number (blocking call).
+     * @param matricNumber The student's matric number
+     * @return Student object or null if not found
+     */
     @Query("SELECT * FROM Student WHERE matricNumber = :matricNumber LIMIT 1")
     Student getStudentByMatric(String matricNumber);
 
-    @Query("SELECT * FROM Student WHERE userName = :userName LIMIT 1")
-    Student getStudentByUsernameSync(String userName);
+    // ========== RELATIONSHIP QUERIES ========== //
 
-    // Student with courses relationships (LiveData)
-    @Transaction
-    @Query("SELECT * FROM Student WHERE userName = :userName")
-    LiveData<StudentWithCourses> getStudentWithCoursesByUserName(String userName);
-
+    /**
+     * Gets a student with their enrolled courses (LiveData).
+     * Uses @Transaction to ensure atomic operation.
+     * @param studentId The student's ID
+     * @return LiveData<StudentWithCourses> containing student and course list
+     */
     @Transaction
     @Query("SELECT * FROM Student WHERE studentId = :studentId")
     LiveData<StudentWithCourses> getStudentWithCoursesById(int studentId);
-
-    // All students queries
-    @Transaction
-    @Query("SELECT * FROM Student")
-    LiveData<List<StudentWithCourses>> getAllStudentsWithCourses();
-
-    @Transaction
-    @Query("SELECT * FROM Student")
-    List<StudentWithCourses> getStudentsWithCoursesSync();
 }

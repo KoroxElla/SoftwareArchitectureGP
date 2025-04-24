@@ -13,37 +13,39 @@ import com.example.part2.databinding.ActivityEditStudentBinding;
 import com.example.part2.viewmodel.StudentViewModel;
 
 public class EditStudentActivity extends AppCompatActivity {
-    private ActivityEditStudentBinding binding;
-    private StudentViewModel studentViewModel;
-    private int studentId;
-
-
+    private ActivityEditStudentBinding binding; // View binding
+    private StudentViewModel studentViewModel; // ViewModel
+    private int studentId; // Student ID to edit
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityEditStudentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setTitle("Edit Student Details");
+
+        // Initialize ViewModel
         studentViewModel = new ViewModelProvider(this).get(StudentViewModel.class);
+
+        // Get student ID from intent
         studentId = getIntent().getIntExtra("studentId", -1);
 
-
         if (studentId != -1) {
-            loadStudentData();
-            setupSaveButton();
+            loadStudentData(); // Load existing data
+            setupSaveButton(); // Configure save button
         } else {
-            finish();
+            finish(); // Close if invalid ID
         }
 
+        // Enable back button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
     }
 
-    //Load existing student information into the edit form
+    /**
+     * Loads student data into EditText fields
+     */
     private void loadStudentData() {
         studentViewModel.getStudentById(studentId).observe(this, student -> {
             if (student != null) {
@@ -54,30 +56,35 @@ public class EditStudentActivity extends AppCompatActivity {
         });
     }
 
-    //Save button to update student
+    /**
+     * Configures save button with validation
+     */
     private void setupSaveButton() {
         binding.btnSaveChanges.setOnClickListener(v -> {
+            // Get input values
             String name = binding.editStudentName.getText().toString();
             String email = binding.editStudentEmail.getText().toString();
             String matric = binding.editStudentMatric.getText().toString();
 
+            // Validate fields
             if (name.isEmpty() || email.isEmpty() || matric.isEmpty()) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            //Create updated student preserving ID and username
+            // Create updated student object
             Student updatedStudent = new Student();
             updatedStudent.setStudentId(studentId);
             updatedStudent.setName(name);
             updatedStudent.setEmail(email);
             updatedStudent.setMatricNumber(matric);
-            // Preserve the username
+
+            // Preserve username from original student
             studentViewModel.getStudentById(studentId).observe(this, originalStudent -> {
                 if (originalStudent != null) {
                     updatedStudent.setUserName(originalStudent.getUserName());
                     studentViewModel.updateStudent(updatedStudent);
-                    finish(); //return to CourseDetailsActivity
+                    finish(); // Close activity after save
                 }
             });
         });
@@ -85,11 +92,11 @@ public class EditStudentActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle back button
         if (item.getItemId() == android.R.id.home) {
-            finish(); // just close this activity and go back
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

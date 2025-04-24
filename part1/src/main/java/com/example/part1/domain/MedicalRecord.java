@@ -31,6 +31,11 @@ public class MedicalRecord {
     @JoinColumn(name = "appointment_id", unique = true)
     private Appointments appointment;
 
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+
     // ========== Getters & Setters ========== //
 
     public Long getId() {
@@ -79,5 +84,13 @@ public class MedicalRecord {
 
     public void setAppointment(Appointments appointment) {
         this.appointment = appointment;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

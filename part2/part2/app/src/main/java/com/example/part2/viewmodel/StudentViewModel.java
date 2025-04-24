@@ -13,17 +13,21 @@ import com.example.part2.data.repository.StudentRepository;
 import java.util.Collections;
 import java.util.List;
 
+// ViewModel for managing student-related data and interactions between UI and repository
 public class StudentViewModel extends AndroidViewModel {
-    private final StudentRepository studentRepository;
-    private final MutableLiveData<String> toastMessage = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> studentAdded = new MutableLiveData<>();
-    private final MutableLiveData<List<Student>> courseStudents = new MutableLiveData<>();
 
+    private final StudentRepository studentRepository; // Handles data operations
+    private final MutableLiveData<String> toastMessage = new MutableLiveData<>(); // For displaying UI messages
+    private final MutableLiveData<Boolean> studentAdded = new MutableLiveData<>(); // Signals if a student was added
+    private final MutableLiveData<List<Student>> courseStudents = new MutableLiveData<>(); // List of students in a course
+
+    // Constructor initializes the repository
     public StudentViewModel(@NonNull Application application) {
         super(application);
         studentRepository = new StudentRepository(application);
     }
 
+    // Getters for LiveData observers in the UI
     public LiveData<String> getToastMessage() {
         return toastMessage;
     }
@@ -31,14 +35,19 @@ public class StudentViewModel extends AndroidViewModel {
     public LiveData<Boolean> getStudentAdded() {
         return studentAdded;
     }
+
+    // Resets the flag to false after the student is added
     public void resetStudentAddedFlag() {
         studentAdded.setValue(false);
     }
+
+    // Public method to trigger and observe students for a specific course
     public LiveData<List<Student>> getStudentsForCourse(String courseCode) {
         loadStudentsForCourse(courseCode);
         return courseStudents;
     }
 
+    // Loads students enrolled in a course from the repository
     public void loadStudentsForCourse(String courseCode) {
         studentRepository.getStudentsForCourse(courseCode, new StudentRepository.RepositoryCallback<>() {
             @Override
@@ -54,6 +63,7 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
+    // Adds a student to a course after validation and checks
     public void addStudentToCourse(String name, String email, String matricNumber, String courseCode) {
         if (name.isEmpty() || email.isEmpty() || matricNumber.isEmpty()) {
             toastMessage.setValue("All fields are required");
@@ -62,6 +72,7 @@ public class StudentViewModel extends AndroidViewModel {
 
         String username = email.contains("@") ? email.substring(0, email.indexOf("@")) : email;
 
+        // Checks if the student already exists by matric number
         studentRepository.getStudentByMatric(matricNumber, new StudentRepository.RepositoryCallback<>() {
             @Override
             public void onSuccess(Student existingStudent) {
@@ -78,31 +89,27 @@ public class StudentViewModel extends AndroidViewModel {
             }
         });
     }
-    public void removeStudentFromCourse(String courseCode, String studentMatric) {
-        studentRepository.removeStudentFromCourse(courseCode, studentMatric);
-        toastMessage.postValue("Student removed from course.");
-    }
 
+    // Checks if a student is already enrolled and either enrolls or updates them
     private void checkEnrollmentAndAdd(String courseCode, Student student, String newName, String newEmail, String matricNumber) {
         studentRepository.getCourseId(courseCode, new StudentRepository.RepositoryCallback<>() {
             @Override
             public void onSuccess(Integer courseId) {
-                studentRepository.isStudentEnrolled(courseId, student.getStudentId(),
-                        new StudentRepository.RepositoryCallback<>() {
-                            @Override
-                            public void onSuccess(Boolean isEnrolled) {
-                                if (isEnrolled) {
-                                    toastMessage.postValue("Student is already enrolled");
-                                } else {
-                                    updateStudentIfNeededAndEnroll(courseId, student, newName, newEmail, matricNumber);
-                                }
-                            }
+                studentRepository.isStudentEnrolled(courseId, student.getStudentId(), new StudentRepository.RepositoryCallback<>() {
+                    @Override
+                    public void onSuccess(Boolean isEnrolled) {
+                        if (isEnrolled) {
+                            toastMessage.postValue("Student is already enrolled");
+                        } else {
+                            updateStudentIfNeededAndEnroll(courseId, student, newName, newEmail, matricNumber);
+                        }
+                    }
 
-                            @Override
-                            public void onError(Exception e) {
-                                toastMessage.postValue("Error checking enrollment");
-                            }
-                        });
+                    @Override
+                    public void onError(Exception e) {
+                        toastMessage.postValue("Error checking enrollment");
+                    }
+                });
             }
 
             @Override
@@ -112,6 +119,7 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
+    // Updates student info if needed before enrolling them
     private void updateStudentIfNeededAndEnroll(int courseId, Student student, String newName, String newEmail, String matricNumber) {
         boolean needsUpdate = !student.getName().equals(newName) ||
                 !student.getEmail().equals(newEmail) ||
@@ -137,6 +145,7 @@ public class StudentViewModel extends AndroidViewModel {
         }
     }
 
+    // Creates a new student and enrolls them in a course
     private void createNewStudent(String courseCode, String name, String email, String matricNumber, String username) {
         Student student = new Student();
         student.setName(name);
@@ -167,40 +176,33 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
+    // Enrolls the student in the specified course
     private void enrollStudent(int courseId, int studentId) {
-        studentRepository.enrollStudent(courseId, studentId,
-                new StudentRepository.RepositoryCallback<>() {
-                    @Override
-                    public void onSuccess(Void result) {
-                        toastMessage.postValue(null);
-                        studentAdded.postValue(true);
-                    }
-                    @Override
-                    public void onError(Exception e) {
-                        toastMessage.postValue("Error enrolling student");
-                    }
-                });
+        studentRepository.enrollStudent(courseId, studentId, new StudentRepository.RepositoryCallback<>() {
+            @Override
+            public void onSuccess(Void result) {
+                toastMessage.postValue(null);
+                studentAdded.postValue(true); // Notify that student was added
+            }
+
+            @Override
+            public void onError(Exception e) {
+                toastMessage.postValue("Error enrolling student");
+            }
+        });
     }
 
-    // For Task 6 - Show student with enrolled courses
-    public LiveData<StudentWithCourses> getStudentWithCourses(String userName) {
-        return studentRepository.getStudentWithCourses(userName);
-    }
-
-    // For EditStudentActivity - get basic Student by username
-    public LiveData<Student> getStudentByUsername(String userName) {
-        return studentRepository.getStudentByUsernameLive(userName);
-    }
-
+    // Retrieves a student with all their courses
     public LiveData<StudentWithCourses> getStudentWithCourses(int studentId) {
         return studentRepository.getStudentWithCourses(studentId);
     }
 
-
+    // Retrieves a single student by ID
     public LiveData<Student> getStudentById(int studentId) {
         return studentRepository.getStudentById(studentId);
     }
 
+    // Updates a student's info
     public void updateStudent(Student student) {
         studentRepository.updateStudent(student, new StudentRepository.RepositoryCallback<>() {
             @Override
@@ -215,12 +217,13 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
+    // Unenrolls a student from a course and refreshes the student list
     public void unenrollStudent(int courseId, int studentId, String courseCode) {
-        studentRepository.unenrollStudent(courseId, studentId, new StudentRepository.RepositoryCallback<Void>() {
+        studentRepository.unenrollStudent(courseId, studentId, new StudentRepository.RepositoryCallback<>() {
             @Override
             public void onSuccess(Void result) {
                 toastMessage.postValue("Student removed from course");
-                loadStudentsForCourse(courseCode);
+                loadStudentsForCourse(courseCode); // Refresh student list
             }
 
             @Override
@@ -230,6 +233,7 @@ public class StudentViewModel extends AndroidViewModel {
         });
     }
 
+    // Exposes course ID retrieval for external use
     public void getCourseId(String courseCode, StudentRepository.RepositoryCallback<Integer> callback) {
         studentRepository.getCourseId(courseCode, callback);
     }

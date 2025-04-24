@@ -2,6 +2,7 @@ package com.example.part1.controller;
 
 import com.example.part1.domain.Doctor;
 import com.example.part1.repo.DoctorRepo;
+import com.example.part1.service.DoctorService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,12 @@ import java.util.List;
 @RequestMapping("/doctors")
 public class DoctorRestController {
 
+    private final DoctorService doctorService;
     private final DoctorRepo doctorRepo;
 
-    public DoctorRestController(DoctorRepo doctorRepo) {
+    public DoctorRestController(DoctorRepo doctorRepo, DoctorService doctorService) {
         this.doctorRepo = doctorRepo;
+        this.doctorService = doctorService;
     }
 
     // === Endpoint #8: List all doctors (GET /doctors) ===
@@ -65,12 +68,13 @@ public class DoctorRestController {
     // === Endpoint #12: Delete a doctor by ID (DELETE /doctors/{id}) ===
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteDoctor(@PathVariable Long id) {
-        if (!doctorRepo.existsById(id)) {
+        boolean deleted = doctorService.deleteDoctorAndPreserveMedicalRecords(id);
+        if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found.");
         }
-        doctorRepo.deleteById(id); // Cascades to appointments (if configured in entity)
-        return ResponseEntity.ok("Doctor deleted."); // HTTP 200 (OK)
+        return ResponseEntity.ok("Doctor deleted and medical records preserved.");
     }
+
 
     // === Endpoint #13: List all appointments for a doctor (GET /doctors/{id}/appointments) ===
     @GetMapping("/{id}/appointments")
