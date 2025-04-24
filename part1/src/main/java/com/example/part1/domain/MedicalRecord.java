@@ -1,48 +1,45 @@
 package com.example.part1.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import java.sql.Timestamp;
+import jakarta.persistence.OneToMany;
+
+import jakarta.validation.constraints.NotBlank;
+
+import java.util.List;
 
 /**
- * Represents a Medical Record in the healthcare system.
- * Each medical record is linked to a single appointment and contains
- * diagnosis, treatment, and additional notes.
+ * Represents a Doctor in the healthcare system.
+ * A doctor can have multiple appointments with one or more patients.
  */
 @Entity // Marks this class as a JPA entity (maps to a database table)
-public class MedicalRecord {
+public class Doctor {
 
     @Id // Marks this field as the primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increments the ID
-    private Long id; // Unique identifier for the medical record
+    private Long id; // Unique identifier for the doctor
 
-    private Timestamp recordDate; // Date and time when the record was created
-    private String diagnosis; // Medical diagnosis for the patient
-    private String treatment; // Prescribed treatment or medication
-    private String notes; // Additional notes or observations
+    @NotBlank(message = "Name is required")
+    private String name; // Full name of the doctor
+    private String specialisation; // Medical specialisation (e.g., Cardiologist)
+    private String email; // Email address of the doctor
+    private String phoneNumber; // Contact number of the doctor
 
     /**
-     * One-to-One relationship with Appointments.
-     * - Each medical record is associated with exactly one appointment.
-     * - `@JoinColumn` specifies the foreign key column (`appointment_id`) in the database.
-     * - `unique = true` ensures that each appointment can have only one medical record.
-     * - The owning side of the relationship is `Appointments` (as it has `mappedBy`).
+     * One-to-Many relationship with Appointments.
+     * - A doctor can have multiple appointments.
+     * - `mappedBy = "doctor"` indicates that the `Appointments` entity owns the relationship.
+     * - `cascade = CascadeType.ALL` ensures operations cascade to appointments.
+     * - `orphanRemoval = true` removes appointments if unlinked from this doctor.
+     * - `@JsonManagedReference` prevents JSON infinite recursion (forward part of the reference).
      */
-    @OneToOne
-    @JoinColumn(name = "appointment_id", unique = true)
-    @JsonBackReference("appointment-medical-record")
-    private Appointments appointment;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("doctor-appointments")
+    private List<Appointments> appointments;
 
     // ========== Getters & Setters ========== //
 
@@ -54,51 +51,43 @@ public class MedicalRecord {
         this.id = id;
     }
 
-    public Timestamp getRecordDate() {
-        return recordDate;
+    public String getName() {
+        return name;
     }
 
-    public void setRecordDate(Timestamp recordDate) {
-        this.recordDate = recordDate;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDiagnosis() {
-        return diagnosis;
+    public String getSpecialisation() {
+        return specialisation;
     }
 
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
+    public void setSpecialisation(String specialisation) {
+        this.specialisation = specialisation;
     }
 
-    public String getTreatment() {
-        return treatment;
+    public String getEmail() {
+        return email;
     }
 
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public Appointments getAppointment() {
-        return appointment;
+    public List<Appointments> getAppointments() {
+        return appointments;
     }
 
-    public void setAppointment(Appointments appointment) {
-        this.appointment = appointment;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setAppointments(List<Appointments> appointments) {
+        this.appointments = appointments;
     }
 }
