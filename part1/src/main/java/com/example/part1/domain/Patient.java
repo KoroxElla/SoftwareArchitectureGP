@@ -1,7 +1,13 @@
 package com.example.part1.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -15,6 +21,7 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increments the ID
     private Long id; // Unique identifier for the patient
 
+    @NotBlank(message = "Name is required")
     private String name; // Full name of the patient
     private String email; // Email address of the patient
     private String phoneNumber; // Contact number of the patient
